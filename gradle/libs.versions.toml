@@ -1,0 +1,63 @@
+[versions]
+ktx = "1.12.0"
+androidGradlePlugin = "8.2.2"
+androidLifecycle = "2.7.0"
+activityCompose = "1.8.2"
+androidxComposeMaterial3Adaptive = "1.0.0-alpha11"
+androidxComposeRuntimeTracing = "1.0.0-beta01"
+androidxComposeUiTest = "1.7.0-alpha07"
+composeBom = "2023.08.00"
+ui = "ui"
+uiGraphics = "ui-graphics"
+uiToolingPreview = "ui-tooling-preview"
+material3 = "material3"
+junit = "4.13.2"
+textExtJunit = "1.1.5"
+espressoCore = "3.5.1"
+hilt = "2.51"
+hiltExt = "1.2.0"
+hiltNavigationCompose = "1.2.0"
+
+
+[libraries]
+androidx-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "ktx" }
+androidx-lifecycle = { group = "androidx.lifecycle" , name = "lifecycle-runtime-ktx", version.ref = "androidLifecycle"}
+androidx-activity = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose"}
+androidx-compose = { group = "androidx.compose" , name = "compose-bom", version.ref = "composeBom"}
+compose-ui = {group = "androidx.compose" , name = "ui", version.ref = "ui"}
+androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation" }
+androidx-compose-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout" }
+androidx-compose-material-iconsExtended = { group = "androidx.compose.material", name = "material-icons-extended" }
+androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx-compose-material3-adaptive = { group = "androidx.compose.material3.adaptive", name = "adaptive", version.ref = "androidxComposeMaterial3Adaptive" }
+androidx-compose-material3-adaptive-layout = { group = "androidx.compose.material3.adaptive", name = "adaptive-layout", version.ref = "androidxComposeMaterial3Adaptive" }
+androidx-compose-material3-adaptive-navigation = { group = "androidx.compose.material3.adaptive", name = "adaptive-navigation", version.ref = "androidxComposeMaterial3Adaptive" }
+androidx-compose-material3-windowSizeClass = { group = "androidx.compose.material3", name = "material3-window-size-class" }
+androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime" }
+androidx-compose-runtime-tracing = { group = "androidx.compose.runtime", name = "runtime-tracing", version.ref = "androidxComposeRuntimeTracing" }
+androidx-compose-ui-test = { group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "androidxComposeUiTest" }
+androidx-compose-ui-testManifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
+androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+androidx-compose-ui-util = { group = "androidx.compose.ui", name = "ui-util" }
+compose-ugraphics = {group = "androidx.compose" , name = "ui", version.ref = "uiGraphics"}
+compose-tool = {group = "androidx.compose" , name = "ui", version.ref = "uiToolingPreview"}
+material3 = {group = "androidx.compose" , name = "material3", version.ref = "material3"}
+junit = {group = "junit" , name = "junit", version.ref = "junit"}
+textExtJunit = {group = "androidx.test.ext" , name = "junit", version.ref = "textExtJunit"}
+espresso = {group = "androidx.test.espresso" , name = "espresso-core", version.ref = "espressoCore"}
+#junit4 = {group = "androidx.compose.ui" , name = "ui-test-junit4", version.ref = "espressoCore"}
+hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
+hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hilt" }
+hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
+hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
+hilt-ext-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "hiltExt" }
+hilt-ext-work = { group = "androidx.hilt", name = "hilt-work", version.ref = "hiltExt" }
+
+
+
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
+
+#{group = "" , name = "", version = ""}

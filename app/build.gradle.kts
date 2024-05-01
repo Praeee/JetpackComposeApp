@@ -1,5 +1,5 @@
 plugins {
-    id("com.android.application")
+    alias(libs.plugins.android.application)
     id("org.jetbrains.kotlin.android")
 }
 
@@ -50,6 +50,13 @@ android {
 }
 
 dependencies {
+
+    implementation(libs.androidx.ktx)
+    implementation(libs.androidx.lifecycle)
+    implementation(libs.androidx.activity)
+    implementation(libs.hilt.android)
+//    implementation(libs.hilt.compiler)
+    implementation(libs.hilt.navigation.compose)
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
