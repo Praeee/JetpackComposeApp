@@ -15,4 +15,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "JetpackComposeApp"
 include(":app")
- 
+include(":utilities")
