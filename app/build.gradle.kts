@@ -1,9 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     id("org.jetbrains.kotlin.android")
-//    id("dagger.hilt.android.plugin")
     id("com.google.dagger.hilt.android")
-    id("kotlin-kapt")
+    kotlin("kapt")
 }
 
 android {
@@ -61,6 +60,7 @@ dependencies {
 //    implementation(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
     kapt(libs.hilt.compiler)
+    kapt(libs.hilt.ext.compiler)
 
 //    kapt "com.google.dagger:hilt-compiler:$hiltVersion"
 
@@ -81,4 +81,8 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+}
+
+kapt {
+    correctErrorTypes = true
 }
