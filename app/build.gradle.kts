@@ -20,17 +20,28 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        android.buildFeatures.buildConfig = true
+
+        val flavorName = "dev"
+        val newsApiKey = getNewsApiKey(flavorName,rootProject)
+        this.buildConfigField("String","NEWS_API_KEY","\"${newsApiKey}\"")
+
     }
 
     buildTypes {
-        release {
+        getByName("debug") {
+            isDebuggable = true
+            isMinifyEnabled = false
+        }
+        getByName("release") {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -49,6 +60,14 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
+//    productFlavors {
+//        all {
+//            val flavorName = this.name
+//            val newsApiKey = getNewsApiKey(flavorName,rootProject)
+//            this.buildConfigField("String","NEWS_API_KEY","\"${newsApiKey}\"")
+//        }
+//    }
 }
 
 dependencies {
@@ -61,6 +80,12 @@ dependencies {
     implementation(libs.hilt.navigation.compose)
     kapt(libs.hilt.compiler)
     kapt(libs.hilt.ext.compiler)
+
+    implementation(libs.okhttp.logging)
+    implementation(libs.retrofit.core)
+    implementation(libs.moshi)
+    implementation(libs.moshi.converter)
+    implementation(libs.loggingIntercepter)
 
 //    kapt "com.google.dagger:hilt-compiler:$hiltVersion"
 
