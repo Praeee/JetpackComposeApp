@@ -12,7 +12,7 @@ import com.praeee.jetpackcomposeapp.ui.viewmodel.NewsViewModel
 
 @Composable
 fun HomeScreen(
-//    newsViewModel: NewsViewModel = hiltViewModel()
+    newsViewModel: NewsViewModel = hiltViewModel()
 ) {
     HomeScreenContent()
 }
