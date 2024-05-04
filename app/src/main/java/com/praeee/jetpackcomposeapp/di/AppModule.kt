@@ -2,6 +2,9 @@ package com.praeee.jetpackcomposeapp.di
 
 import com.praeee.jetpackcomposeapp.data.AppConstants.APP_BASE_URL
 import com.praeee.jetpackcomposeapp.data.api.ApiService
+import com.praeee.jetpackcomposeapp.data.datasource.NewsDataSource
+import com.praeee.jetpackcomposeapp.data.datasource.NewsDataSourceImpl
+import com.praeee.jetpackcomposeapp.ui.repository.NewsRepository
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -44,6 +47,18 @@ class AppModule {
     @Provides
     fun providesApiService(retrofit: Retrofit) : ApiService {
         return retrofit.create(ApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun providesNewDataSource(apiService: ApiService): NewsDataSource {
+        return NewsDataSourceImpl(apiService)
+    }
+
+    @Provides
+    @Singleton
+    fun provideNewsRepository(newsDataSource: NewsDataSource) : NewsRepository {
+        return NewsRepository(newsDataSource)
     }
 
 }

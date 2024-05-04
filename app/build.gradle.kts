@@ -86,6 +86,8 @@ dependencies {
     implementation(libs.moshi)
     implementation(libs.moshi.converter)
     implementation(libs.loggingIntercepter)
+    implementation(libs.coroutine.core)
+    implementation(libs.coroutine.android)
 
 //    kapt "com.google.dagger:hilt-compiler:$hiltVersion"
 
