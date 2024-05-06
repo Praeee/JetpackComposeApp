@@ -3,7 +3,7 @@ package com.praeee.jetpackcomposeapp.data.entity
 data class NewsResponse(
     val status : String?="",
     val totalResults : Int?=0,
-    val articles: List<Article> ?= listOf()
+    val articles: List<Article> ?= emptyList()
 )
 
 data class Article (

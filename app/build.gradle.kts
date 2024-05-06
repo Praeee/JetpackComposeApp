@@ -88,6 +88,7 @@ dependencies {
     implementation(libs.loggingIntercepter)
     implementation(libs.coroutine.core)
     implementation(libs.coroutine.android)
+    implementation(libs.splashscreen)
 
 //    kapt "com.google.dagger:hilt-compiler:$hiltVersion"
 
