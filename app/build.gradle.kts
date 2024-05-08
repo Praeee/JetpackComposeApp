@@ -89,6 +89,9 @@ dependencies {
     implementation(libs.coroutine.core)
     implementation(libs.coroutine.android)
     implementation(libs.splashscreen)
+    implementation(libs.glide)
+    annotationProcessor(libs.glide.complier)
+//    implementation(libs.realm)
 
 //    kapt "com.google.dagger:hilt-compiler:$hiltVersion"
 

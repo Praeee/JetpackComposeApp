@@ -12,6 +12,8 @@ buildscript {
         classpath(libs.android.gradlePlugin)
         classpath(libs.android.hilt.android.gradle.plugin)
         classpath(libs.kotlin.gradlePlugin)
+//        classpath(libs.realm)
+//        classpath "io.realm:realm-gradle-plugin:10.11.0"
     }
 
     repositories {

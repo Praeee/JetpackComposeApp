@@ -24,11 +24,13 @@ retrofit = "2.9.0"
 retrofitKotlinxSerializationJson = "1.0.0"
 okhttp = "4.12.0"
 gsonConverter  = "2.11.0"
+glide = "4.16.0"
 moshi = "1.15.1"
 moshiConverter = "2.11.0"
 loggingInterceptor = "5.0.0-alpha.14"
 coroutineCore = "1.8.0"
 splashscreen = "1.0.1"
+realm = "10.11.0"
 
 [libraries]
 androidx-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "ktx" }
@@ -70,6 +72,9 @@ retrofit-core = { group = "com.squareup.retrofit2", name = "retrofit", version.r
 retrofit-kotlin-serialization = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version.ref = "retrofitKotlinxSerializationJson" }
 okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
 gson-converter = { group = "com.squareup.retrofits2", name = "converter-gson" , version.ref = "gsonConverter"}
+glide = { group = "com.github.bumptech.glide", name = "glide" , version.ref = "glide"}
+glide-complier = { group = "com.github.bumptech.glide", name = "compiler" , version.ref = "glide"}
+
 moshi = { group = "com.squareup.moshi", name = "moshi-kotlin" , version.ref = "moshi"}
 moshi-converter = { group = "com.squareup.retrofit2", name = "converter-moshi" , version.ref = "moshiConverter"}
 loggingIntercepter = { group = "com.squareup.okhttp3", name = "logging-interceptor" , version.ref = "loggingInterceptor"}
@@ -79,10 +84,12 @@ kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-pl
 coroutine-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutineCore" }
 coroutine-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutineCore" }
 splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "splashscreen" }
+realm = { group = "io.realm", name = "realm-gradle-plugin" , version.ref ="realm"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 androidLibrary = { id = "com.android.library", version.ref = "androidGradlePlugin" }
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+realm = { id = "realm-android", version.ref = "realm" }
 
 #{group = "" , name = "", version = ""}
