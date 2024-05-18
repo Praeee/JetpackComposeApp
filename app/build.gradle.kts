@@ -61,13 +61,6 @@ android {
         }
     }
 
-//    productFlavors {
-//        all {
-//            val flavorName = this.name
-//            val newsApiKey = getNewsApiKey(flavorName,rootProject)
-//            this.buildConfigField("String","NEWS_API_KEY","\"${newsApiKey}\"")
-//        }
-//    }
 }
 
 dependencies {
@@ -76,7 +69,6 @@ dependencies {
     implementation(libs.androidx.lifecycle)
     implementation(libs.androidx.activity)
     implementation(libs.hilt.android)
-//    implementation(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
     kapt(libs.hilt.compiler)
     kapt(libs.hilt.ext.compiler)
@@ -91,11 +83,8 @@ dependencies {
     implementation(libs.splashscreen)
     implementation(libs.glide)
     annotationProcessor(libs.glide.complier)
-//    implementation(libs.realm)
-
-//    kapt "com.google.dagger:hilt-compiler:$hiltVersion"
-
-//    implementation(project(Modules.utilities))
+    implementation(libs.coil)
+    implementation(libs.coil.svg)
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
