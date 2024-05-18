@@ -29,7 +29,7 @@ class NewsViewModel @Inject constructor(
     init {
         Log.d(TAG,"init block of NewsViewModel")
         doSomething()
-        getNews(AppConstants.COUNTRY)
+//        getNews(AppConstants.COUNTRY)
     }
 
     private fun getNews(country: String) {

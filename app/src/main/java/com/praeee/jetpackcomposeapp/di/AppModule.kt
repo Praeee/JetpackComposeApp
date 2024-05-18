@@ -1,9 +1,12 @@
 package com.praeee.jetpackcomposeapp.di
 
-import com.praeee.jetpackcomposeapp.data.AppConstants.APP_BASE_URL
+import com.praeee.jetpackcomposeapp.data.AppConstants.COIN_RANKING_URL
 import com.praeee.jetpackcomposeapp.data.api.ApiService
+import com.praeee.jetpackcomposeapp.data.datasource.CoinDataSource
+import com.praeee.jetpackcomposeapp.data.datasource.CoinDataSourceImpl
 import com.praeee.jetpackcomposeapp.data.datasource.NewsDataSource
 import com.praeee.jetpackcomposeapp.data.datasource.NewsDataSourceImpl
+import com.praeee.jetpackcomposeapp.ui.repository.CoinRepository
 import com.praeee.jetpackcomposeapp.ui.repository.NewsRepository
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -21,6 +24,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class AppModule {
+
     @Provides
     @Singleton
     fun providesRetrofit() : Retrofit {
@@ -37,7 +41,7 @@ class AppModule {
             .add(KotlinJsonAdapterFactory()).build()
 
         return Retrofit.Builder()
-            .baseUrl(APP_BASE_URL)
+            .baseUrl(COIN_RANKING_URL)
             .client(httpClient.build())
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
@@ -49,16 +53,30 @@ class AppModule {
         return retrofit.create(ApiService::class.java)
     }
 
+    //comment
     @Provides
     @Singleton
     fun providesNewDataSource(apiService: ApiService): NewsDataSource {
         return NewsDataSourceImpl(apiService)
     }
 
+    //comment
     @Provides
     @Singleton
     fun provideNewsRepository(newsDataSource: NewsDataSource) : NewsRepository {
         return NewsRepository(newsDataSource)
+    }
+
+    @Provides
+    @Singleton
+    fun providesCoinDataSource(apiService: ApiService): CoinDataSource {
+        return CoinDataSourceImpl(apiService)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCoinRepository(coinDataSource: CoinDataSource) : CoinRepository {
+        return CoinRepository(coinDataSource)
     }
 
 }
