@@ -2,6 +2,7 @@ package com.praeee.jetpackcomposeapp.ui.feature_home_page.screens
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
@@ -92,6 +93,7 @@ fun HomeScreen(
 
     val state by coinViewModel.uiState.collectAsState()
     val onEvent = coinViewModel::onEvent
+
 
     Log.d(TAG, "isLoading :: ${state.isLoading}")
     Log.d(TAG, "coinListState :: ${state.coinListState.toString()}")
@@ -466,17 +468,34 @@ fun BottomSheetDetail(
             }
         }
 
-        Text(
-            text = coin.description ?: "",
-            modifier = modifier
-                .padding(16.dp),
-            textAlign = TextAlign.Start,
-            style = TextStyle(
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Medium
-            ),
-            color = Color(0xFFACACAC)
-        )
+        if (coin.description.isNullOrBlank() || coin.description.isEmpty()) {
+            Text(
+                text = "No description",
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                textAlign = TextAlign.Center,
+                style = TextStyle(
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Medium
+                ),
+                color = Color(0xFFACACAC)
+            )
+        } else {
+            Text(
+                text = coin.description ?: "",
+                modifier = modifier
+                    .padding(16.dp),
+                textAlign = TextAlign.Start,
+                style = TextStyle(
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Medium
+                ),
+                color = Color(0xFFACACAC)
+            )
+        }
+
+
 
 //        Row(
 //            modifier = modifier
@@ -496,11 +515,19 @@ fun BottomSheetDetail(
 //
 //        }
 
+        val localContext = LocalContext.current
 
         if (coin.websiteUrl != null) {
             Row(
                 modifier = modifier
                     .fillMaxWidth()
+                    .clickable {
+                        val urlIntent = Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse(coin.websiteUrl)
+                        )
+                        localContext.startActivity(urlIntent)
+                    }
                     .align(Alignment.CenterHorizontally),
             ) {
                 Text(
