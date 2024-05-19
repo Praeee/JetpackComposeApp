@@ -1,8 +1,12 @@
 package com.praeee.jetpackcomposeapp.ui.feature_home_page.screens
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.util.Log
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,14 +20,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -31,11 +41,17 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
@@ -56,13 +72,18 @@ import com.praeee.jetpackcomposeapp.R
 import com.praeee.jetpackcomposeapp.data.entity.Article
 import com.praeee.jetpackcomposeapp.data.entity.Source
 import com.praeee.jetpackcomposeapp.ui.components.Loader
+import com.praeee.jetpackcomposeapp.ui.feature_home_page.screens.domain.model.CoinDetailViewState
 import com.praeee.jetpackcomposeapp.ui.feature_home_page.screens.domain.model.CoinState
 import com.praeee.jetpackcomposeapp.ui.feature_home_page.screens.domain.model.CoinViewStateValue
+import com.praeee.jetpackcomposeapp.ui.feature_home_page.screens.event.CoinEvent
 import com.praeee.jetpackcomposeapp.ui.feature_home_page.screens.viewmodel.CoinViewModel
 import com.praeee.jetpackcomposeapp.ui.theme.JetpackComposeAppTheme
+import kotlinx.coroutines.launch
 
 const val TAG = "HomeScreen"
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     coinViewModel: CoinViewModel = hiltViewModel()
@@ -70,23 +91,44 @@ fun HomeScreen(
 ) {
 
     val state by coinViewModel.uiState.collectAsState()
-    Log.d(TAG,"coinListState :: ${state.coinListState.toString()}")
-    Log.d(TAG,"coinTopRank :: ${state.coinTopRank.toString()}")
+    val onEvent = coinViewModel::onEvent
+
+    Log.d(TAG, "isLoading :: ${state.isLoading}")
+    Log.d(TAG, "coinListState :: ${state.coinListState.toString()}")
+    Log.d(TAG, "coinTopRank :: ${state.coinTopRank.toString()}")
+    Log.d(TAG, "coinDetailState :: ${state.coinDetailState.toString()}")
+
+
+
+    val sheetState = rememberModalBottomSheetState()
+    val scope = rememberCoroutineScope()
+    var showBottomSheet by remember { mutableStateOf(false) }
 
     if (state.isLoading) {
         Loader()
     }
 
-    HomeScreenContent(state)
+    if (state.isOpenBottomSheet) {
+        BottomSheet(
+            state.coinDetailState
+        )
+    }
+
+    HomeScreenContent(
+        state = state,
+        onEvent = onEvent
+    )
 
 
 }
 
 @Composable
 fun HomeScreenContent(
-    state : CoinViewStateValue,
-    modifier: Modifier = Modifier
+    state: CoinViewStateValue,
+    modifier: Modifier = Modifier,
+    onEvent: (CoinEvent) -> Unit,
 ) {
+
 
     Surface(
         modifier = Modifier
@@ -97,24 +139,33 @@ fun HomeScreenContent(
 
             SearchText()
 
-            LazyColumn {
+            LazyColumn(
+                modifier = modifier
+            ) {
+//                item{
+//                    if (state.coinDetailState != null) {
+//                        BottomSheetDetail(state.coinDetailState)
+//                    }
+//                }
                 if (state.coinTopRank != null) {
 
                     itemsIndexed(state.coinTopRank!!.chunked(3)) { _, rowItems ->
-                        Row(modifier =
-                        modifier
-                            .fillMaxWidth()
-                            .padding(8.dp)
+                        Row(
+                            modifier =
+                            modifier
+                                .fillMaxWidth()
+                                .padding(8.dp)
                         ) {
                             Column {
                                 TopRankTitle()
-                                Row(modifier =
-                                modifier
-                                    .fillMaxWidth()
-                                    .padding(8.dp)
+                                Row(
+                                    modifier =
+                                    modifier
+                                        .fillMaxWidth()
+                                        .padding(8.dp)
                                 ) {
                                     rowItems.forEach { coin ->
-                                        TopLankListItem(coin,modifier)
+                                        TopLankListItem(coin, modifier, onEvent)
                                     }
                                     // Fill empty space if the row is not completely filled
                                     if (rowItems.size < 3) {
@@ -147,11 +198,12 @@ fun HomeScreenContent(
 
 
 
-                itemsIndexed(state.coinListState?.coins?: listOf()) { index, coinList ->
+                itemsIndexed(state.coinListState?.coins ?: listOf()) { index, coinList ->
 
                     CoinListItem(
-                        coinList,
-                        modifier
+                        coin = coinList,
+                        modifier = modifier,
+                        onEvent = onEvent
                     )
 
                     if (state.inDiceFriendIndex?.contains(index) == true) {
@@ -240,7 +292,7 @@ fun SearchText() {
                 contentDescription = "icon_expend",
                 modifier = Modifier
                     .height(14.dp),
-                    tint = Color(0xFFCCCCCC)
+                tint = Color(0xFFCCCCCC)
             )
         },
         singleLine = false
@@ -290,7 +342,9 @@ fun CoilImage(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BottomSheet() {
+fun BottomSheet(
+    detail: CoinDetailViewState? = null
+) {
     val mapActionSheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = false
     )
@@ -299,20 +353,191 @@ fun BottomSheet() {
         dragHandle = null,
         onDismissRequest = {},
     ) {
-
+        if (detail != null) {
+            BottomSheetDetail(coin = detail)
+        }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun BottomSheetDetail(
+    coin: CoinDetailViewState,
+    modifier: Modifier = Modifier
+) {
+    Column {
+        Row(
+            modifier = modifier
+                .height(100.dp)
+        ) {
+            CoilImage(
+                imageUrl = coin.iconUrl ?: "",
+                sizeImage = 100
+            )
+            Column(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+            ) {
+                Row {
+                    Text(
+                        text = coin.name ?: "",
+                        modifier = modifier
+                            .padding(top = 8.dp),
+                        maxLines = 1,
+                        textAlign = TextAlign.Center,
+                        style = TextStyle(
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold
+                        ),
+                        color = Color.Magenta//Color(0xFF ${ coin.color })//Color.Black
+                    )
+                    Text(
+                        text = coin.symbol ?: "-",
+                        modifier = modifier
+                            .padding(top = 8.dp, start = 8.dp),
+                        maxLines = 1,
+                        textAlign = TextAlign.Center,
+                        style = TextStyle(
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold
+                        ),
+                        color = Color.Black//Color(0xFF ${ coin.color })//Color.Black
+                    )
+                }
+                Row(
+                    modifier = Modifier
+                        .wrapContentWidth()
+                ) {
+                    Text(
+                        text = "PRICE",//coin.name?:"",
+                        modifier = modifier
+                            .padding(top = 8.dp),
+                        maxLines = 1,
+                        textAlign = TextAlign.Center,
+                        style = TextStyle(
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold
+                        ),
+                        color = Color.Black//Color(0xFF ${ coin.color })//Color.Black
+                    )
+                    Text(
+                        text = coin.price ?: "",
+                        modifier = modifier
+                            .padding(top = 8.dp, start = 8.dp),
+                        maxLines = 1,
+                        textAlign = TextAlign.Center,
+                        style = TextStyle(
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Normal
+                        ),
+                        color = Color.Black//Color(0xFF ${ coin.color })//Color.Black
+                    )
+                }
+                Row(
+                    modifier = Modifier
+                        .wrapContentWidth()
+                ) {
+                    Text(
+                        text = "MARKET CAP",//coin.name?:"",
+                        modifier = modifier
+                            .padding(top = 8.dp),
+                        maxLines = 1,
+                        textAlign = TextAlign.Center,
+                        style = TextStyle(
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold
+                        ),
+                        color = Color.Black//Color(0xFF ${ coin.color })//Color.Black
+                    )
+                    Text(
+                        text = coin.marketCap ?: "",
+                        modifier = modifier
+                            .padding(top = 8.dp, start = 8.dp),
+                        maxLines = 1,
+                        textAlign = TextAlign.Center,
+                        style = TextStyle(
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Normal
+                        ),
+                        color = Color.Black//Color(0xFF ${ coin.color })//Color.Black
+                    )
+                }
+            }
+        }
+
+        Text(
+            text = coin.description ?: "",
+            modifier = modifier
+                .padding(16.dp),
+            textAlign = TextAlign.Start,
+            style = TextStyle(
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Medium
+            ),
+            color = Color(0xFFACACAC)
+        )
+
+//        Row(
+//            modifier = modifier
+//                .fillMaxWidth()
+//                .padding(vertical = 8.dp)
+//                .background(Color.Gray)
+//                .align(Alignment.CenterHorizontally)
+//        ) {
+//            Canvas(modifier = modifier.fillMaxWidth()) {
+//                drawLine(
+//                    color = Color.Black, // Change color as needed
+//                    start = Offset(0f, 0f),
+//                    end = Offset(300f, 300f),
+//                    strokeWidth = 4f, // Adjust stroke width as needed
+//                )
+//            }
+//
+//        }
+
+
+        if (coin.websiteUrl != null) {
+            Row(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .align(Alignment.CenterHorizontally),
+            ) {
+                Text(
+                    text = "GO TO WEBSITE",//coin.name?:"",
+                    modifier = modifier
+                        .padding(16.dp)
+                        .fillMaxWidth(),
+                    textAlign = TextAlign.Center,
+                    style = TextStyle(
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold
+                    ),
+                    color = Color(0xFF1D8EF6)
+                )
+            }
+        }
+
+
+    }
+
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CoinListItem(
-    coin : CoinState,
-    modifier: Modifier = Modifier
+    coin: CoinState,
+    modifier: Modifier = Modifier,
+    onEvent: (CoinEvent) -> Unit,
 ) {
     Card(
         colors = CardDefaults.cardColors(
             containerColor = Color(0xFFF3F3F3),
         ),
-
+        onClick = {
+            onEvent(CoinEvent.onClickItem(coin))
+        },
         modifier = modifier
             .height(100.dp)
             .padding(8.dp),
@@ -323,7 +548,7 @@ fun CoinListItem(
                 .height(100.dp)
         ) {
             CoilImage(
-                imageUrl = coin.iconUrl?:"",
+                imageUrl = coin.iconUrl ?: "",
                 sizeImage = 100
             )
             Column(
@@ -332,7 +557,7 @@ fun CoinListItem(
                     .padding(8.dp)
             ) {
                 Text(
-                    text = coin.name?:"",
+                    text = coin.name ?: "",
                     modifier = modifier
                         .padding(top = 8.dp)
                         .weight(1f),
@@ -345,7 +570,7 @@ fun CoinListItem(
                     color = Color.Black
                 )
                 Text(
-                    text = coin.symbol?:"",
+                    text = coin.symbol ?: "",
                     modifier = modifier
                         .align(Alignment.Start)
                         .padding(top = 4.dp)
@@ -384,12 +609,16 @@ fun CoinListItem(
                     Image(
                         modifier = modifier
                             .height(16.dp),
-                        colorFilter = if (coin.lowVolume == true) ColorFilter.tint(Color(0xFF1ABD66))else ColorFilter.tint(Color(0xFFFF0000)) ,
-                        painter = if (coin.lowVolume == true) painterResource(id = (R.drawable.up_icon)) else painterResource(id = (R.drawable.down_icon)),
+                        colorFilter = if (coin.lowVolume == true) ColorFilter.tint(Color(0xFF1ABD66)) else ColorFilter.tint(
+                            Color(0xFFFF0000)
+                        ),
+                        painter = if (coin.lowVolume == true) painterResource(id = (R.drawable.up_icon)) else painterResource(
+                            id = (R.drawable.down_icon)
+                        ),
                         contentDescription = "icon"
                     )
                     Text(
-                        text = coin.change?:"",
+                        text = coin.change ?: "",
                         modifier = modifier,
                         style = TextStyle(
                             fontSize = 16.sp,
@@ -407,9 +636,10 @@ fun CoinListItem(
 
 @Composable
 fun TopLankListItem(
-    coin : CoinState,
-    modifier: Modifier = Modifier
-) {
+    coin: CoinState,
+    modifier: Modifier = Modifier,
+    onEvent: (CoinEvent) -> Unit,
+    ) {
     Card(
         colors = CardDefaults.cardColors(
             containerColor = Color(0xFFF3F3F3),
@@ -418,17 +648,20 @@ fun TopLankListItem(
             .height(150.dp)
             .width(100.dp)
             .padding(4.dp)
-        ) {
+            .clickable {
+                onEvent(CoinEvent.onClickItem(coin))
+            }
+    ) {
         Column(
             modifier = modifier
                 .align(Alignment.CenterHorizontally)
         ) {
             CoilImage(
-                imageUrl = coin.iconUrl?:"",
+                imageUrl = coin.iconUrl ?: "",
                 sizeImage = 70
             )
             Text(
-                text = coin.symbol?:"",
+                text = coin.symbol ?: "",
                 modifier = modifier
                     .fillMaxWidth()
                     .align(Alignment.CenterHorizontally),
@@ -441,7 +674,7 @@ fun TopLankListItem(
                 color = Color.Black
             )
             Text(
-                text = coin.name?:"",
+                text = coin.name ?: "",
                 modifier = modifier
                     .align(Alignment.CenterHorizontally)
                     .padding(2.dp),
@@ -460,12 +693,16 @@ fun TopLankListItem(
                 Image(
                     modifier = modifier
                         .height(14.dp),
-                    colorFilter = if (coin.lowVolume == true) ColorFilter.tint(Color(0xFF1ABD66))else ColorFilter.tint(Color(0xFFFF0000)) ,
-                    painter = if (coin.lowVolume == true) painterResource(id = (R.drawable.up_icon)) else painterResource(id = (R.drawable.down_icon)),
+                    colorFilter = if (coin.lowVolume == true) ColorFilter.tint(Color(0xFF1ABD66)) else ColorFilter.tint(
+                        Color(0xFFFF0000)
+                    ),
+                    painter = if (coin.lowVolume == true) painterResource(id = (R.drawable.up_icon)) else painterResource(
+                        id = (R.drawable.down_icon)
+                    ),
                     contentDescription = "icon"
                 )
                 Text(
-                    text = coin.change?:"",
+                    text = coin.change ?: "",
                     modifier = modifier,
                     style = TextStyle(
                         fontSize = 14.sp,
@@ -501,46 +738,13 @@ fun NotFoundKeyword() {
             text = "No result match the keyword",
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp)
-            ,
+                .padding(8.dp),
             textAlign = TextAlign.Center,
             style = TextStyle.Default,
             fontSize = 18.sp,
             color = Color(0xFFACACAC)
         )
     }
-}
-
-@Composable
-fun NewListItem(article: Article) {
-    Card(
-        colors = CardDefaults.cardColors(
-            containerColor = Color.LightGray,
-        ),
-        modifier = Modifier
-            .padding(8.dp)
-            .fillMaxWidth(),
-
-        ) {
-        Row {
-            AsyncImage(
-                model = "https://cdn.coinranking.com/bOabBYkcX/bitcoin_btc.svg",
-                contentDescription = null,
-            )
-        }
-        Column {
-            Text(
-                text = "Bitcoin",
-                modifier = Modifier
-                    .padding(16.dp),
-                textAlign = TextAlign.Center,
-                style = TextStyle.Default
-            )
-        }
-
-
-    }
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -583,7 +787,12 @@ fun InviteFriendsItem(text: String) {
             ) {
                 val textString = buildAnnotatedString {
                     append("You can earn \$10 when you invite a friend to buy crypto.")
-                    withStyle(style = SpanStyle(color = Color(0xFF1D8EF6), fontWeight = FontWeight.Medium)) {
+                    withStyle(
+                        style = SpanStyle(
+                            color = Color(0xFF1D8EF6),
+                            fontWeight = FontWeight.Medium
+                        )
+                    ) {
                         append(" Invite your friend")
                     }
                 }
@@ -620,25 +829,11 @@ fun HomeScreenContentPreview() {
     }
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFF444444)
-@Composable
-fun NewsListItemPreview() {
-    JetpackComposeAppTheme {
-        NewListItem(
-            Article(
-                source = Source(
-
-                )
-            )
-        )
-    }
-}
-
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
     JetpackComposeAppTheme {
-        CoilImage(imageUrl = "" , sizeImage = 100)
+        CoilImage(imageUrl = "", sizeImage = 100)
     }
 }
 
@@ -654,7 +849,7 @@ fun NotFoundKeywordPreview() {
 @Composable
 fun CoinListItemPreview() {
     JetpackComposeAppTheme {
-        CoinListItem(CoinState())
+        CoinListItem(CoinState(), onEvent = {})
     }
 }
 
@@ -670,7 +865,7 @@ fun InviteFriendsItemPreview() {
 @Composable
 fun TopLankListItemPreview() {
     JetpackComposeAppTheme {
-        TopLankListItem(CoinState())
+        TopLankListItem(CoinState(), onEvent = {})
     }
 }
 
@@ -695,6 +890,14 @@ fun BottomSheetPreview() {
 fun TopRankTitlePreview() {
     JetpackComposeAppTheme {
         TopRankTitle()
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun BottomSheetDetailPreview() {
+    JetpackComposeAppTheme {
+        BottomSheetDetail(CoinDetailViewState())
     }
 }
 

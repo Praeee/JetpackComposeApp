@@ -11,6 +11,7 @@ import com.praeee.jetpackcomposeapp.data.entity.coin_list_response.CoinResponse
 import com.praeee.jetpackcomposeapp.data.entity.coin_list_response.toCoinListState
 import com.praeee.jetpackcomposeapp.ui.feature_home_page.screens.domain.model.CoinListState
 import com.praeee.jetpackcomposeapp.ui.feature_home_page.screens.domain.model.CoinViewStateValue
+import com.praeee.jetpackcomposeapp.ui.feature_home_page.screens.event.CoinEvent
 import com.praeee.jetpackcomposeapp.ui.repository.CoinRepository
 import com.praeee.jetpackcomposeapp.utilities.ResourceState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,21 +28,6 @@ class CoinViewModel @Inject constructor(
     private val coinRepository: CoinRepository
 ) : ViewModel() {
 
-    val value = "value"
-    private val _news: MutableStateFlow<ResourceState<NewsResponse>> =
-        MutableStateFlow(ResourceState.Loading())
-    val news: StateFlow<ResourceState<NewsResponse>> = _news
-
-    private val _coinList: MutableStateFlow<ResourceState<CoinResponse>> =
-        MutableStateFlow(ResourceState.Loading())
-    val coinList: StateFlow<ResourceState<CoinResponse>> = _coinList
-
-    private val _coinDetail: MutableStateFlow<ResourceState<CoinDetailResponse>> =
-        MutableStateFlow(ResourceState.Loading())
-    val coinDetail: StateFlow<ResourceState<CoinDetailResponse>> = _coinDetail
-
-    val viewState : MutableLiveData<CoinViewStateValue> = MutableLiveData()
-
     private val _uiState = MutableStateFlow(CoinViewStateValue())
     val uiState: StateFlow<CoinViewStateValue> = _uiState.asStateFlow()
 
@@ -51,9 +37,6 @@ class CoinViewModel @Inject constructor(
         )
         Log.d(TAG,"init block of CoinViewModel")
         getCoinList()
-//        mapDataTopLank()
-//        getCoinDetail("Qwsogvtv82FCd")
-
 
     }
 
@@ -99,7 +82,9 @@ class CoinViewModel @Inject constructor(
                     }
                 }
             } catch (error: Exception) {
-                _coinList.emit(ResourceState.Error(error.localizedMessage?: "error catch"))
+                _uiState.value = CoinViewStateValue(
+                    isError = true,
+                )
             }
 
         }
@@ -107,29 +92,54 @@ class CoinViewModel @Inject constructor(
 
     private fun getCoinDetail(uuid : String?) {
         Log.d(TAG,"init getCoinDetail")
+        Log.d(TAG,"init uuid $uuid")
 
         if (uuid != null) {
             viewModelScope.launch(Dispatchers.IO) {
                 try {
                     coinRepository.getCoinDetail(uuid).collectLatest { coinDetailResponse ->
-                        _coinDetail.value = coinDetailResponse
-                        _uiState.value = CoinViewStateValue(
-                            isLoading = false,
-                            coinDetailState = (coinDetailResponse as ResourceState.Success).data.toCoinDetailViewState()
-                        )
+                        when (coinDetailResponse) {
+                            is ResourceState.Success -> {
+                                _uiState.value = CoinViewStateValue(
+                                    isLoading = false,
+                                    isError = false,
+                                    coinListState = _uiState.value.coinListState,
+                                    coinDetailState = coinDetailResponse.data.toCoinDetailViewState(),
+                                    isOpenBottomSheet = true
+                                )
+                            }
+                            is ResourceState.Error -> {
+                                _uiState.value = CoinViewStateValue(
+                                    isError = true,
+                                    isLoading = false,
+                                )
+                            }
+                            is ResourceState.Loading -> {
+                                _uiState.value = CoinViewStateValue(
+                                    isLoading = true,
+                                    isError = false,
+                                )
+                            }
+                        }
                     }
                 } catch (error: Exception) {
-                    _coinList.emit(ResourceState.Error(error.localizedMessage?: "error catch"))
+                    _uiState.value = CoinViewStateValue(
+                        isError = true,
+                    )
                 }
 
             }
         }
-        return
-
     }
 
-    private fun doSomething() {
-        print("doSomething")
+    fun onEvent(event: CoinEvent) {
+        when (event) {
+            is CoinEvent.onClickItem -> {
+                Log.d(TAG,"onEvent item ${event.item}")
+                getCoinDetail(event.item.uuid)
+
+            }
+        }
     }
 
     companion object {

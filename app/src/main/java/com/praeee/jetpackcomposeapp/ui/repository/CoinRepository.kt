@@ -41,12 +41,8 @@ class CoinRepository @Inject constructor(
             val response = coinDataSource.getCoinDetail(uuid)
 
             when  {
-                response.isSuccessful -> {
-                    if (response.body()!!.status == "success") {
-                        emit(ResourceState.Success(response.body()!!))
-                    } else {
-                        emit(ResourceState.Error("Error data status un success"))
-                    }
+                response.isSuccessful && response.body() != null -> {
+                    emit(ResourceState.Success(response.body()!!))
                 }
                 else -> {
                     emit(ResourceState.Error("Error fetching coin data"))

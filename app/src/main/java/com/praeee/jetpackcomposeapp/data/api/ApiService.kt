@@ -29,12 +29,4 @@ interface ApiService {
     ): Response<CoinResponse>
 
 
-    //list
-    //https://api.coinranking.com/v2/coins
-    //detail
-    //https://api.coinranking.com/v2/coin/Qwsogvtv82FCd
-    //search
-    //https://api.coinranking.com/v2/coins?search=bit
-
-
 }
