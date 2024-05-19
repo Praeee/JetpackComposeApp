@@ -139,6 +139,10 @@ class CoinViewModel @Inject constructor(
                 getCoinDetail(event.item.uuid)
 
             }
+
+            is CoinEvent.onErrorUi -> {
+                getCoinList()
+            }
         }
     }
 

@@ -4,5 +4,6 @@ import com.praeee.jetpackcomposeapp.ui.feature_home_page.screens.domain.model.Co
 
 sealed class CoinEvent {
     data class onClickItem(val item: CoinState) : CoinEvent()
+    data class onErrorUi(val error: Boolean) : CoinEvent()
 
 }

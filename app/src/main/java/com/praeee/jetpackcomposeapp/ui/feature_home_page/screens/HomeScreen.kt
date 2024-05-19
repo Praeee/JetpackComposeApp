@@ -53,6 +53,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusState
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
@@ -76,6 +78,7 @@ import coil.size.Size
 import com.praeee.jetpackcomposeapp.R
 import com.praeee.jetpackcomposeapp.data.entity.Article
 import com.praeee.jetpackcomposeapp.data.entity.Source
+import com.praeee.jetpackcomposeapp.ui.components.ErrorUiState
 import com.praeee.jetpackcomposeapp.ui.components.Loader
 import com.praeee.jetpackcomposeapp.ui.feature_home_page.screens.domain.model.CoinDetailViewState
 import com.praeee.jetpackcomposeapp.ui.feature_home_page.screens.domain.model.CoinState
@@ -162,6 +165,17 @@ fun HomeScreenContent(
                     }
                 }
 
+                if (state.isError) {
+                    item {
+                        ErrorUiState(
+                            onClick = {
+                                onEvent.invoke(CoinEvent.onErrorUi(true))
+                            }
+                        )
+                    }
+
+                }
+
                 if (state.coinTopRank != null) {
 
                     itemsIndexed(state.coinTopRank!!.chunked(3)) { _, rowItems ->
@@ -212,9 +226,6 @@ fun HomeScreenContent(
                         )
                     }
                 }
-
-
-
 
                 itemsIndexed(state.coinListState?.coins ?: listOf()) { index, coinList ->
 
@@ -286,14 +297,28 @@ fun TopRankTitle() {
 }
 
 @Composable
-fun SearchText() {
+fun SearchText(
+    isFocus: Boolean = false,
+    onFocused: ((FocusState) -> Unit)? = null,
+) {
+    val focusedState = remember { mutableStateOf(isFocus) }
+
     TextField(
         value = "",
         onValueChange = {
 
         },
+
         modifier = Modifier
             .fillMaxWidth()
+            .onFocusChanged {
+                if (it.isFocused) {
+                    focusedState.value = true
+                    onFocused?.invoke(it)
+                } else {
+                    focusedState.value = false
+                }
+            }
             .padding(8.dp),
         shape = RoundedCornerShape(16.dp),
         placeholder = {
