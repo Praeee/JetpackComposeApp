@@ -1,4 +1,4 @@
-package com.praeee.jetpackcomposeapp.ui.viewmodel
+package com.praeee.jetpackcomposeapp.ui.feature_home_page.screens.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
