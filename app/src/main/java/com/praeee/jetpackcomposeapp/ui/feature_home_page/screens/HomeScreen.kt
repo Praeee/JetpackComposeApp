@@ -5,12 +5,14 @@ import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -23,6 +25,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -40,6 +43,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -106,9 +110,6 @@ fun HomeScreen(
     val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
 
-    if (state.isLoading) {
-        Loader()
-    }
 
     if (state.isOpenBottomSheet) {
         BottomSheet(
@@ -131,6 +132,16 @@ fun HomeScreenContent(
     onEvent: (CoinEvent) -> Unit,
 ) {
 
+//    val onScrollToEnd = remember {
+//        {
+//            val layoutManager = LocalContext.current.resources.displayMetrics.heightPixels
+//            val list = localState.value.value as LazyListState
+//            if (!list.isScrollInProgress && list.firstVisibleItemScrollOffset == list.layoutContentHeight - layoutManager) {
+//                onLoadMore()
+//            }
+//        }
+//    }
+
 
     Surface(
         modifier = Modifier
@@ -144,11 +155,13 @@ fun HomeScreenContent(
             LazyColumn(
                 modifier = modifier
             ) {
-//                item{
-//                    if (state.coinDetailState != null) {
-//                        BottomSheetDetail(state.coinDetailState)
-//                    }
-//                }
+
+                if (state.isLoading) {
+                    item {
+                        Loader()
+                    }
+                }
+
                 if (state.coinTopRank != null) {
 
                     itemsIndexed(state.coinTopRank!!.chunked(3)) { _, rowItems ->
@@ -183,20 +196,23 @@ fun HomeScreenContent(
                     }
                 }
 
-                item {
-                    Text(
-                        text = "Buy, sell and hold crypto",
-                        modifier = modifier
-                            .padding(start = 16.dp),
-                        maxLines = 1,
-                        textAlign = TextAlign.Start,
-                        style = TextStyle(
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Medium,
-                        ),
-                        color = Color.Black
-                    )
+                if (!state.isLoading) {
+                    item {
+                        Text(
+                            text = "Buy, sell and hold crypto",
+                            modifier = modifier
+                                .padding(start = 16.dp),
+                            maxLines = 1,
+                            textAlign = TextAlign.Start,
+                            style = TextStyle(
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Medium,
+                            ),
+                            color = Color.Black
+                        )
+                    }
                 }
+
 
 
 
@@ -216,6 +232,10 @@ fun HomeScreenContent(
 
 
             }
+
+//            SideEffect {
+//                onScrollToEnd()
+//            }
 
 
         }
@@ -361,7 +381,7 @@ fun BottomSheet(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun BottomSheetDetail(
     coin: CoinDetailViewState,
@@ -495,6 +515,22 @@ fun BottomSheetDetail(
             )
         }
 
+//        val sections = listOf("A", "B", "C", "D", "E", "F", "G")
+//
+//        LazyColumn(reverseLayout = true, contentPadding = PaddingValues(6.dp)) {
+//            sections.forEach { section ->
+//                stickyHeader {
+//                    Text(
+//                        "Section $section",
+//                        Modifier.fillMaxWidth().background(Color.LightGray).padding(8.dp)
+//                    )
+//                }
+//                items(10) {
+//                    Text("Item $it from the section $section")
+//                }
+//            }
+//        }
+
 
 
 //        Row(
@@ -531,7 +567,7 @@ fun BottomSheetDetail(
                     .align(Alignment.CenterHorizontally),
             ) {
                 Text(
-                    text = "GO TO WEBSITE",//coin.name?:"",
+                    text = "GO TO WEBSITE",
                     modifier = modifier
                         .padding(16.dp)
                         .fillMaxWidth(),
