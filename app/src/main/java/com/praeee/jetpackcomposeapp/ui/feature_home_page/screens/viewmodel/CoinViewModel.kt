@@ -1,20 +1,29 @@
 package com.praeee.jetpackcomposeapp.ui.feature_home_page.screens.viewmodel
 
 import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.praeee.jetpackcomposeapp.data.entity.coin_detail_response.toCoinDetailViewState
 import com.praeee.jetpackcomposeapp.data.entity.coin_list_response.toCoinListState
+import com.praeee.jetpackcomposeapp.data.entity.coin_list_response.toStatsState
+import com.praeee.jetpackcomposeapp.ui.feature_home_page.screens.domain.model.CoinListState
 import com.praeee.jetpackcomposeapp.ui.feature_home_page.screens.domain.model.CoinViewStateValue
 import com.praeee.jetpackcomposeapp.ui.feature_home_page.screens.event.CoinEvent
 import com.praeee.jetpackcomposeapp.ui.repository.CoinRepository
 import com.praeee.jetpackcomposeapp.utilities.ResourceState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,11 +32,16 @@ class CoinViewModel @Inject constructor(
     private val coinRepository: CoinRepository
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(CoinViewStateValue())
-    val uiState: StateFlow<CoinViewStateValue> = _uiState.asStateFlow()
+//    private val _uiState = MutableStateFlow(CoinViewStateValue())
+//    val uiState: StateFlow<CoinViewStateValue> = _uiState.asStateFlow()
+
+    var uiState by mutableStateOf(CoinViewStateValue())
+        private set
+
+    private var job: Job? = null
 
     init {
-        _uiState.value = CoinViewStateValue(
+        uiState  = uiState.copy(
             isLoading = true,
             isError = false
         )
@@ -46,6 +60,25 @@ class CoinViewModel @Inject constructor(
         return result
     }
 
+//    fun startFetchingData() {
+//        job = viewModelScope.launch(Dispatchers.IO) {
+//            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+//                while (isActive) {
+//                    getCoinList()
+//                    delay(10000) // 10 seconds delay
+//                }
+//            }
+//        }
+//    }
+
+    fun stopFetchingData() {
+        job?.cancel()
+    }
+
+    fun pullToRefresh() {
+        getCoinList()
+    }
+
 
     private fun getCoinList() {
         Log.d(TAG,"init getCoinList")
@@ -55,22 +88,30 @@ class CoinViewModel @Inject constructor(
                 coinRepository.getCoinList().collectLatest { coinResponse ->
                     when (coinResponse) {
                         is ResourceState.Success -> {
-                            _uiState.value = CoinViewStateValue(
+                            uiState  = uiState.copy(
                                 isLoading = false,
                                 isError = false,
-                                coinListState = coinResponse.data.toCoinListState(),
+                                coinSearchListState = null,
+                                coinListState = CoinListState(
+                                    coins = if (coinResponse.data.toCoinListState().coins?.size!! > 0 ) {
+                                        coinResponse.data.toCoinListState().coins?.filter { it.rank!! > 3 }
+                                    } else {
+                                        coinResponse.data.toCoinListState().coins
+                                    },
+                                    stats = coinResponse.data.data.stats.toStatsState()
+                                ) ,
                                 coinTopRank = coinResponse.data.toCoinListState().coins?.filter { it.rank in 1..3 },
                                 inDiceFriendIndex = generateNumbers(5,coinResponse.data.toCoinListState().coins?.size?:5).toSet()
                             )
                         }
                         is ResourceState.Error -> {
-                            _uiState.value = CoinViewStateValue(
+                            uiState  = uiState.copy(
                                 isError = true,
                                 isLoading = false,
                             )
                         }
                         is ResourceState.Loading -> {
-                            _uiState.value = CoinViewStateValue(
+                            uiState  = uiState.copy(
                                 isLoading = true,
                                 isError = false,
                             )
@@ -78,7 +119,7 @@ class CoinViewModel @Inject constructor(
                     }
                 }
             } catch (error: Exception) {
-                _uiState.value = CoinViewStateValue(
+                uiState  = uiState.copy(
                     isError = true,
                 )
             }
@@ -96,7 +137,7 @@ class CoinViewModel @Inject constructor(
                     coinRepository.getCoinDetail(uuid).collectLatest { coinDetailResponse ->
                         when (coinDetailResponse) {
                             is ResourceState.Success -> {
-                                _uiState.value = CoinViewStateValue(
+                                uiState  = uiState.copy(
                                     isLoading = false,
                                     isError = false,
                                     coinDetailState = coinDetailResponse.data.toCoinDetailViewState(),
@@ -104,21 +145,23 @@ class CoinViewModel @Inject constructor(
                                 )
                             }
                             is ResourceState.Error -> {
-                                _uiState.value = CoinViewStateValue(
+                                uiState  = uiState.copy(
                                     isError = true,
                                     isLoading = false,
+                                    isOpenBottomSheet = false
                                 )
                             }
                             is ResourceState.Loading -> {
-                                _uiState.value = CoinViewStateValue(
+                                uiState  = uiState.copy(
                                     isLoading = true,
                                     isError = false,
+                                    isOpenBottomSheet = false
                                 )
                             }
                         }
                     }
                 } catch (error: Exception) {
-                    _uiState.value = CoinViewStateValue(
+                    uiState  = uiState.copy(
                         isError = true,
                     )
                 }
@@ -137,20 +180,22 @@ class CoinViewModel @Inject constructor(
                     coinRepository.getCoinSearch(text).collectLatest { searchList  ->
                         when (searchList) {
                             is ResourceState.Success -> {
-                                _uiState.value = CoinViewStateValue(
+                                val coinSearchListState = searchList.data.toCoinListState()
+                                uiState  = uiState.copy(
                                     isLoading = false,
                                     isError = false,
-                                    coinSearchListState = searchList.data.toCoinListState(),
+                                    coinSearchListState = coinSearchListState,
+                                    isNoResult = coinSearchListState.coins.isNullOrEmpty()
                                 )
                             }
                             is ResourceState.Error -> {
-                                _uiState.value = CoinViewStateValue(
+                                uiState  = uiState.copy(
                                     isError = true,
                                     isLoading = false,
                                 )
                             }
                             is ResourceState.Loading -> {
-                                _uiState.value = CoinViewStateValue(
+                                uiState  = uiState.copy(
                                     isLoading = true,
                                     isError = false,
                                 )
@@ -158,7 +203,7 @@ class CoinViewModel @Inject constructor(
                         }
                     }
                 } catch (error: Exception) {
-                    _uiState.value = CoinViewStateValue(
+                    uiState  = uiState.copy(
                         isError = true,
                     )
                 }

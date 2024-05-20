@@ -5,9 +5,9 @@ data class CoinViewStateValue (
     val coinDetailState: CoinDetailViewState? = null,
     var coinTopRank: List<CoinState>?= listOf(),
     val isLoading: Boolean = true,
-    val isError: Boolean = true,
+    val isError: Boolean = false,
     val inDiceFriendIndex : Set<Int>?= setOf(),
     val isOpenBottomSheet: Boolean = false,
     val coinSearchListState: CoinListState?= null,
-
-    )
+    val isNoResult: Boolean = false,
+)

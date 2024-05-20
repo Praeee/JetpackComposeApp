@@ -3,6 +3,7 @@ package com.praeee.jetpackcomposeapp.ui.components
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -47,7 +48,7 @@ fun ErrorUiState(
 ) {
     Column(
         modifier = modifier
-            .fillMaxWidth()
+            .fillMaxSize()
     ) {
         Text(
             text = "Could not load data",
@@ -77,6 +78,40 @@ fun ErrorUiState(
     }
 }
 
+@Composable
+fun NotFoundKeyword() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .fillMaxHeight(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = "Sorry",
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp),
+            maxLines = 1,
+            fontSize = 24.sp,
+            textAlign = TextAlign.Center,
+            style = TextStyle.Default,
+            color = Color.Black
+        )
+        Text(
+            text = "No result match the keyword",
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            textAlign = TextAlign.Center,
+            style = TextStyle.Default,
+            fontSize = 18.sp,
+            color = Color(0xFFACACAC)
+        )
+    }
+}
+
+
 @Preview(showBackground = true)
 @Composable
 fun LoaderPreview() {
@@ -90,6 +125,14 @@ fun LoaderPreview() {
 fun ErrorUiStatePreview() {
     JetpackComposeAppTheme {
         ErrorUiState(onClick = {})
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun NotFoundKeywordPreview() {
+    JetpackComposeAppTheme {
+        NotFoundKeyword()
     }
 }
 
