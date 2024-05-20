@@ -67,6 +67,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
+import coil.decode.SvgDecoder
 import coil.request.ImageRequest
 import coil.size.Size
 import com.praeee.jetpackcomposeapp.R
@@ -409,7 +410,10 @@ fun CoilImage(
 //            contentScale = ContentScale.Crop
 //        )
         AsyncImage(
-            model = imageUrl,
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(imageUrl)
+                .decoderFactory(SvgDecoder.Factory())
+                .build(),
             contentDescription = "icon",
             modifier = Modifier
 //                .wrapContentHeight()
@@ -554,41 +558,6 @@ fun BottomSheetDetail(
             )
         }
 
-//        val sections = listOf("A", "B", "C", "D", "E", "F", "G")
-//
-//        LazyColumn(reverseLayout = true, contentPadding = PaddingValues(6.dp)) {
-//            sections.forEach { section ->
-//                stickyHeader {
-//                    Text(
-//                        "Section $section",
-//                        Modifier.fillMaxWidth().background(Color.LightGray).padding(8.dp)
-//                    )
-//                }
-//                items(10) {
-//                    Text("Item $it from the section $section")
-//                }
-//            }
-//        }
-
-
-
-//        Row(
-//            modifier = modifier
-//                .fillMaxWidth()
-//                .padding(vertical = 8.dp)
-//                .background(Color.Gray)
-//                .align(Alignment.CenterHorizontally)
-//        ) {
-//            Canvas(modifier = modifier.fillMaxWidth()) {
-//                drawLine(
-//                    color = Color.Black, // Change color as needed
-//                    start = Offset(0f, 0f),
-//                    end = Offset(300f, 300f),
-//                    strokeWidth = 4f, // Adjust stroke width as needed
-//                )
-//            }
-//
-//        }
 
         val localContext = LocalContext.current
 
