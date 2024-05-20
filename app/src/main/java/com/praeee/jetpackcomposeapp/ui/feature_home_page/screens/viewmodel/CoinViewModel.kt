@@ -1,15 +1,10 @@
 package com.praeee.jetpackcomposeapp.ui.feature_home_page.screens.viewmodel
 
 import android.util.Log
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.praeee.jetpackcomposeapp.data.entity.NewsResponse
-import com.praeee.jetpackcomposeapp.data.entity.coin_detail_response.CoinDetailResponse
 import com.praeee.jetpackcomposeapp.data.entity.coin_detail_response.toCoinDetailViewState
-import com.praeee.jetpackcomposeapp.data.entity.coin_list_response.CoinResponse
 import com.praeee.jetpackcomposeapp.data.entity.coin_list_response.toCoinListState
-import com.praeee.jetpackcomposeapp.ui.feature_home_page.screens.domain.model.CoinListState
 import com.praeee.jetpackcomposeapp.ui.feature_home_page.screens.domain.model.CoinViewStateValue
 import com.praeee.jetpackcomposeapp.ui.feature_home_page.screens.event.CoinEvent
 import com.praeee.jetpackcomposeapp.ui.repository.CoinRepository
@@ -34,6 +29,7 @@ class CoinViewModel @Inject constructor(
     init {
         _uiState.value = CoinViewStateValue(
             isLoading = true,
+            isError = false
         )
         Log.d(TAG,"init block of CoinViewModel")
         getCoinList()
@@ -103,7 +99,6 @@ class CoinViewModel @Inject constructor(
                                 _uiState.value = CoinViewStateValue(
                                     isLoading = false,
                                     isError = false,
-                                    coinListState = _uiState.value.coinListState,
                                     coinDetailState = coinDetailResponse.data.toCoinDetailViewState(),
                                     isOpenBottomSheet = true
                                 )
@@ -132,16 +127,65 @@ class CoinViewModel @Inject constructor(
         }
     }
 
-    fun onEvent(event: CoinEvent) {
-        when (event) {
-            is CoinEvent.onClickItem -> {
-                Log.d(TAG,"onEvent item ${event.item}")
-                getCoinDetail(event.item.uuid)
+    private fun onSearchText(text : String?) {
+        Log.d(TAG,"init onSearchText")
+        Log.d(TAG,"init text $text")
+
+        if (!text.isNullOrEmpty() || !text.isNullOrBlank()) {
+            viewModelScope.launch(Dispatchers.IO) {
+                try {
+                    coinRepository.getCoinSearch(text).collectLatest { searchList  ->
+                        when (searchList) {
+                            is ResourceState.Success -> {
+                                _uiState.value = CoinViewStateValue(
+                                    isLoading = false,
+                                    isError = false,
+                                    coinSearchListState = searchList.data.toCoinListState(),
+                                )
+                            }
+                            is ResourceState.Error -> {
+                                _uiState.value = CoinViewStateValue(
+                                    isError = true,
+                                    isLoading = false,
+                                )
+                            }
+                            is ResourceState.Loading -> {
+                                _uiState.value = CoinViewStateValue(
+                                    isLoading = true,
+                                    isError = false,
+                                )
+                            }
+                        }
+                    }
+                } catch (error: Exception) {
+                    _uiState.value = CoinViewStateValue(
+                        isError = true,
+                    )
+                }
 
             }
+        } else {
+            getCoinList()
+        }
+    }
 
-            is CoinEvent.onErrorUi -> {
+
+    fun onEvent(event: CoinEvent) {
+        when (event) {
+            is CoinEvent.OnClickItemCoin -> {
+                getCoinDetail(event.item.uuid)
+            }
+
+            is CoinEvent.OnErrorUi -> {
                 getCoinList()
+            }
+
+            is CoinEvent.OnSearchText -> {
+                onSearchText(event.text)
+            }
+
+            is CoinEvent.OnCloseBottomSheet -> {
+
             }
         }
     }

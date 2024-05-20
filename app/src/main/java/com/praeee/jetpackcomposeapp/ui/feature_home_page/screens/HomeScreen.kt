@@ -4,15 +4,12 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -25,46 +22,43 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.Button
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
@@ -76,17 +70,15 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
 import com.praeee.jetpackcomposeapp.R
-import com.praeee.jetpackcomposeapp.data.entity.Article
-import com.praeee.jetpackcomposeapp.data.entity.Source
 import com.praeee.jetpackcomposeapp.ui.components.ErrorUiState
 import com.praeee.jetpackcomposeapp.ui.components.Loader
 import com.praeee.jetpackcomposeapp.ui.feature_home_page.screens.domain.model.CoinDetailViewState
+import com.praeee.jetpackcomposeapp.ui.feature_home_page.screens.domain.model.CoinListState
 import com.praeee.jetpackcomposeapp.ui.feature_home_page.screens.domain.model.CoinState
 import com.praeee.jetpackcomposeapp.ui.feature_home_page.screens.domain.model.CoinViewStateValue
 import com.praeee.jetpackcomposeapp.ui.feature_home_page.screens.event.CoinEvent
 import com.praeee.jetpackcomposeapp.ui.feature_home_page.screens.viewmodel.CoinViewModel
 import com.praeee.jetpackcomposeapp.ui.theme.JetpackComposeAppTheme
-import kotlinx.coroutines.launch
 
 const val TAG = "HomeScreen"
 
@@ -106,19 +98,7 @@ fun HomeScreen(
     Log.d(TAG, "coinListState :: ${state.coinListState.toString()}")
     Log.d(TAG, "coinTopRank :: ${state.coinTopRank.toString()}")
     Log.d(TAG, "coinDetailState :: ${state.coinDetailState.toString()}")
-
-
-
-    val sheetState = rememberModalBottomSheetState()
-    val scope = rememberCoroutineScope()
-    var showBottomSheet by remember { mutableStateOf(false) }
-
-
-    if (state.isOpenBottomSheet) {
-        BottomSheet(
-            state.coinDetailState
-        )
-    }
+    Log.d(TAG, "isOpenBottomSheet :: ${state.isOpenBottomSheet.toString()}")
 
     HomeScreenContent(
         state = state,
@@ -128,6 +108,7 @@ fun HomeScreen(
 
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreenContent(
     state: CoinViewStateValue,
@@ -135,16 +116,16 @@ fun HomeScreenContent(
     onEvent: (CoinEvent) -> Unit,
 ) {
 
-//    val onScrollToEnd = remember {
-//        {
-//            val layoutManager = LocalContext.current.resources.displayMetrics.heightPixels
-//            val list = localState.value.value as LazyListState
-//            if (!list.isScrollInProgress && list.firstVisibleItemScrollOffset == list.layoutContentHeight - layoutManager) {
-//                onLoadMore()
-//            }
-//        }
-//    }
+    val (text, setText) = remember { mutableStateOf("") }
 
+    val activityActionSheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = false,
+    )
+    var openActivityActionSheet by rememberSaveable { mutableStateOf(state.isOpenBottomSheet) }
+
+    LaunchedEffect(state.isOpenBottomSheet) {
+        openActivityActionSheet = state.isOpenBottomSheet
+    }
 
     Surface(
         modifier = Modifier
@@ -153,11 +134,33 @@ fun HomeScreenContent(
 
         Column {
 
-            SearchText()
+            SearchText(
+                value = text,
+                onValueChange = setText,
+                onFocusLost = { newText ->
+                    onEvent.invoke(CoinEvent.OnSearchText(newText))
+                }
+            )
 
             LazyColumn(
                 modifier = modifier
             ) {
+
+                if (openActivityActionSheet) {
+                    item {
+                        ModalBottomSheet(
+                            sheetState = activityActionSheetState,
+                            dragHandle = null,
+                            onDismissRequest = {
+                                openActivityActionSheet = false
+                            },
+                        ) {
+                            if (state.coinDetailState != null) {
+                                BottomSheetDetail(coin = state.coinDetailState)
+                            }
+                        }
+                    }
+                }
 
                 if (state.isLoading) {
                     item {
@@ -169,14 +172,14 @@ fun HomeScreenContent(
                     item {
                         ErrorUiState(
                             onClick = {
-                                onEvent.invoke(CoinEvent.onErrorUi(true))
+                                onEvent.invoke(CoinEvent.OnErrorUi(true))
                             }
                         )
                     }
 
                 }
 
-                if (state.coinTopRank != null) {
+                if (state.coinTopRank != null && text.isEmpty()) {
 
                     itemsIndexed(state.coinTopRank!!.chunked(3)) { _, rowItems ->
                         Row(
@@ -210,7 +213,7 @@ fun HomeScreenContent(
                     }
                 }
 
-                if (!state.isLoading) {
+                if (!state.isLoading && !state.isError) {
                     item {
                         Text(
                             text = "Buy, sell and hold crypto",
@@ -227,19 +230,37 @@ fun HomeScreenContent(
                     }
                 }
 
-                itemsIndexed(state.coinListState?.coins ?: listOf()) { index, coinList ->
+                if (state.coinSearchListState?.coins.isNullOrEmpty()) {
+                    itemsIndexed(state.coinListState?.coins ?: emptyList()) { index, coinList ->
 
-                    CoinListItem(
-                        coin = coinList,
-                        modifier = modifier,
-                        onEvent = onEvent
-                    )
+                        CoinListItem(
+                            coin = coinList,
+                            modifier = modifier,
+                            onEvent = onEvent
+                        )
 
-                    if (state.inDiceFriendIndex?.contains(index) == true) {
-                        InviteFriendsItem("Invite your friend")
+                        if (state.inDiceFriendIndex?.contains(index) == true) {
+                            InviteFriendsItem("Invite your friend")
+                        }
+
+                    }
+                } else {
+                    itemsIndexed(state.coinSearchListState?.coins ?: emptyList()) { index, coinList ->
+
+                        CoinListItem(
+                            coin = coinList,
+                            modifier = modifier,
+                            onEvent = onEvent
+                        )
+
+                        if (state.inDiceFriendIndex?.contains(index) == true) {
+                            InviteFriendsItem("Invite your friend")
+                        }
+
                     }
 
                 }
+
 
 
             }
@@ -298,29 +319,42 @@ fun TopRankTitle() {
 
 @Composable
 fun SearchText(
-    isFocus: Boolean = false,
-    onFocused: ((FocusState) -> Unit)? = null,
+    value: String,
+    onValueChange: (String) -> Unit,
+    onFocusLost: (String) -> Unit,
 ) {
-    val focusedState = remember { mutableStateOf(isFocus) }
+    var text by remember { mutableStateOf(value) }
+    var focusedState by remember { mutableStateOf(false) }
+    val keyboardController = LocalSoftwareKeyboardController.current
+
 
     TextField(
-        value = "",
+        value = text,
         onValueChange = {
-
+            text = it
         },
-
         modifier = Modifier
             .fillMaxWidth()
             .onFocusChanged {
                 if (it.isFocused) {
-                    focusedState.value = true
-                    onFocused?.invoke(it)
+                    keyboardController?.show()
+                    focusedState = true
                 } else {
-                    focusedState.value = false
+                    focusedState = false
+                    onFocusLost(text)
                 }
             }
             .padding(8.dp),
         shape = RoundedCornerShape(16.dp),
+        keyboardOptions = KeyboardOptions.Default.copy(
+            imeAction = ImeAction.Done
+        ),
+        keyboardActions = KeyboardActions(
+            onDone = {
+                keyboardController?.hide()
+                onFocusLost(text)
+            }
+        ),
         placeholder = {
             Text(
                 text = "Search",
@@ -387,26 +421,6 @@ fun CoilImage(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun BottomSheet(
-    detail: CoinDetailViewState? = null
-) {
-    val mapActionSheetState = rememberModalBottomSheetState(
-        skipPartiallyExpanded = false
-    )
-    ModalBottomSheet(
-        sheetState = mapActionSheetState,
-        dragHandle = null,
-        onDismissRequest = {},
-    ) {
-        if (detail != null) {
-            BottomSheetDetail(coin = detail)
-        }
-    }
-}
-
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun BottomSheetDetail(
     coin: CoinDetailViewState,
@@ -582,6 +596,7 @@ fun BottomSheetDetail(
             Row(
                 modifier = modifier
                     .fillMaxWidth()
+                    .padding(bottom = 16.dp)
                     .clickable {
                         val urlIntent = Intent(
                             Intent.ACTION_VIEW,
@@ -619,12 +634,13 @@ fun CoinListItem(
     modifier: Modifier = Modifier,
     onEvent: (CoinEvent) -> Unit,
 ) {
+
     Card(
         colors = CardDefaults.cardColors(
             containerColor = Color(0xFFF3F3F3),
         ),
         onClick = {
-            onEvent(CoinEvent.onClickItem(coin))
+            onEvent(CoinEvent.OnClickItemCoin(coin))
         },
         modifier = modifier
             .height(100.dp)
@@ -737,7 +753,7 @@ fun TopLankListItem(
             .width(100.dp)
             .padding(4.dp)
             .clickable {
-                onEvent(CoinEvent.onClickItem(coin))
+                onEvent(CoinEvent.OnClickItemCoin(coin))
             }
     ) {
         Column(
@@ -961,15 +977,11 @@ fun TopLankListItemPreview() {
 @Composable
 fun SearchTextPreview() {
     JetpackComposeAppTheme {
-        SearchText()
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun BottomSheetPreview() {
-    JetpackComposeAppTheme {
-        BottomSheet()
+        SearchText(
+            value = "",
+            onValueChange = {},
+            onFocusLost = {}
+        )
     }
 }
 
