@@ -1,10 +1,12 @@
 package com.praeee.jetpackcomposeapp.ui.feature_home_page.screens.widgets
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -23,10 +25,13 @@ import com.praeee.jetpackcomposeapp.ui.theme.JetpackComposeAppTheme
 
 @Composable
 fun TopRankTitlePortrait() {
+    val color = MaterialTheme.colorScheme
 
     val textString = buildAnnotatedString {
-        append("Top ")
-        withStyle(style = SpanStyle(color = Color(0xFFFF0000), fontWeight = FontWeight.Medium)) {
+        withStyle(style = SpanStyle(color = color.primary, fontWeight = FontWeight.Medium)) {
+            append("Top ")
+        }
+        withStyle(style = SpanStyle(color = color.onSecondary, fontWeight = FontWeight.Medium)) {
             append(" 3  ")
         }
     }
@@ -47,7 +52,7 @@ fun TopRankTitlePortrait() {
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Medium,
             ),
-            color = Color.Black
+            color = color.primary
         )
 
         Text(
@@ -62,7 +67,7 @@ fun TopRankTitlePortrait() {
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Medium,
             ),
-            color = Color.Black
+            color =  color.primary
         )
     }
 
@@ -71,9 +76,12 @@ fun TopRankTitlePortrait() {
 
 @Composable
 fun TopRankTitleLandscape() {
+    val color = MaterialTheme.colorScheme
 
     val textString = buildAnnotatedString {
-        append("Top ")
+        withStyle(style = SpanStyle(color = color.primary, fontWeight = FontWeight.Medium)) {
+            append("Top ")
+        }
         withStyle(style = SpanStyle(color = Color(0xFFFF0000), fontWeight = FontWeight.Medium)) {
             append(" 3  ")
         }
@@ -95,7 +103,7 @@ fun TopRankTitleLandscape() {
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Medium,
             ),
-            color = Color.Black
+            color =  color.primary
         )
 
         Text(
@@ -108,11 +116,20 @@ fun TopRankTitleLandscape() {
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Medium,
             ),
-            color = Color.Black
+            color =  color.primary
         )
     }
 
 }
+
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark"
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight"
+)
 
 
 

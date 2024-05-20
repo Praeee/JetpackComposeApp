@@ -1,5 +1,6 @@
 package com.praeee.jetpackcomposeapp.ui.components
 
+import android.content.res.Configuration
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -46,6 +48,8 @@ fun ErrorUiState(
     modifier: Modifier = Modifier,
     onClick : () -> Unit
 ) {
+    val color = MaterialTheme.colorScheme
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -59,7 +63,7 @@ fun ErrorUiState(
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Normal
             ),
-            color = Color.Black
+            color = color.primary
         )
         Text(
             text = "Try again",
@@ -80,6 +84,8 @@ fun ErrorUiState(
 
 @Composable
 fun NotFoundKeyword() {
+    val color = MaterialTheme.colorScheme
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -96,7 +102,7 @@ fun NotFoundKeyword() {
             fontSize = 24.sp,
             textAlign = TextAlign.Center,
             style = TextStyle.Default,
-            color = Color.Black
+            color = color.primary
         )
         Text(
             text = "No result match the keyword",
@@ -106,10 +112,20 @@ fun NotFoundKeyword() {
             textAlign = TextAlign.Center,
             style = TextStyle.Default,
             fontSize = 18.sp,
-            color = Color(0xFFACACAC)
+            color = color.secondary
         )
     }
 }
+
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark"
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight"
+)
+
 
 
 @Preview(showBackground = true)
@@ -120,6 +136,16 @@ fun LoaderPreview() {
     }
 }
 
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark"
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight"
+)
+
+
 @Preview(showBackground = true)
 @Composable
 fun ErrorUiStatePreview() {
@@ -127,6 +153,15 @@ fun ErrorUiStatePreview() {
         ErrorUiState(onClick = {})
     }
 }
+
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark"
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight"
+)
 
 @Preview(showBackground = true)
 @Composable

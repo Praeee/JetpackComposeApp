@@ -1,14 +1,19 @@
 package com.praeee.jetpackcomposeapp.ui.feature_home_page.screens.widgets
 
+import android.content.res.Configuration
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,6 +34,7 @@ import androidx.compose.ui.unit.sp
 import com.praeee.jetpackcomposeapp.R
 import com.praeee.jetpackcomposeapp.ui.theme.JetpackComposeAppTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchText(
     value: String,
@@ -38,6 +44,7 @@ fun SearchText(
     var text by remember { mutableStateOf(value) }
     var focusedState by remember { mutableStateOf(false) }
     val keyboardController = LocalSoftwareKeyboardController.current
+    val color = MaterialTheme.colorScheme
 
 
     TextField(
@@ -57,6 +64,7 @@ fun SearchText(
                 }
             }
             .padding(8.dp),
+        colors = TextFieldDefaults.colors(color.primary),
         shape = RoundedCornerShape(16.dp),
         keyboardOptions = KeyboardOptions.Default.copy(
             imeAction = ImeAction.Done
@@ -76,7 +84,7 @@ fun SearchText(
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Normal
                 ),
-                color = Color(0xFFACACAC)
+                color = color.secondary
             )
         },
         leadingIcon = {
@@ -85,12 +93,21 @@ fun SearchText(
                 contentDescription = "icon_expend",
                 modifier = Modifier
                     .height(14.dp),
-                tint = Color(0xFFCCCCCC)
+                tint = color.primaryContainer
             )
         },
         singleLine = false
     )
 }
+
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark"
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight"
+)
 
 @Preview(showBackground = true)
 @Composable

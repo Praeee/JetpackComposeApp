@@ -1,7 +1,9 @@
 package com.praeee.jetpackcomposeapp.ui.feature_home_page.screens.widgets
 
 import android.content.Intent
+import android.content.res.Configuration
 import android.net.Uri
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -31,7 +34,11 @@ fun BottomSheetDetail(
     coin: CoinDetailViewState,
     modifier: Modifier = Modifier
 ) {
-    Column {
+    val color = MaterialTheme.colorScheme
+
+    Column( modifier = modifier
+        .background(color.background)
+    ) {
         Row(
             modifier = modifier
                 .height(100.dp)
@@ -57,7 +64,7 @@ fun BottomSheetDetail(
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold
                         ),
-                        color = Color.Black
+                        color = color.primary
                     )
                     Text(
                         text = coin.symbol ?: "-",
@@ -69,7 +76,7 @@ fun BottomSheetDetail(
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold
                         ),
-                        color = Color.Black
+                        color = color.primary
                     )
                 }
                 Row(
@@ -86,7 +93,7 @@ fun BottomSheetDetail(
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold
                         ),
-                        color = Color.Black
+                        color = color.primary
                     )
                     Text(
                         text = coin.price ?: "",
@@ -98,7 +105,7 @@ fun BottomSheetDetail(
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Normal
                         ),
-                        color = Color.Black
+                        color = color.primary
                     )
                 }
                 Row(
@@ -115,7 +122,7 @@ fun BottomSheetDetail(
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold
                         ),
-                        color = Color.Black
+                        color = color.primary
                     )
                     Text(
                         text = coin.marketCap ?: "",
@@ -127,7 +134,7 @@ fun BottomSheetDetail(
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Normal
                         ),
-                        color = Color.Black
+                        color = color.primary
                     )
                 }
             }
@@ -144,7 +151,7 @@ fun BottomSheetDetail(
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Medium
                 ),
-                color = Color(0xFFACACAC)
+                color = color.onPrimary
             )
         } else {
             Text(
@@ -156,7 +163,7 @@ fun BottomSheetDetail(
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Medium
                 ),
-                color = Color(0xFFACACAC)
+                color = color.onPrimary
             )
         }
 
@@ -196,6 +203,15 @@ fun BottomSheetDetail(
     }
 
 }
+
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark"
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight"
+)
 
 @Preview(showBackground = true)
 @Composable

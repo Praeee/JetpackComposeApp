@@ -1,6 +1,8 @@
 package com.praeee.jetpackcomposeapp.ui.feature_home_page.screens.widgets.orientationScreen
 
 import android.util.Log
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -52,7 +55,7 @@ fun HomeScreenContentPortrait(
 ) {
 
     Log.d(TAG, "inDiceFriendIndex :: ${state.inDiceFriendIndex.toString()}")
-
+    val color = MaterialTheme.colorScheme
 
     val (text, setText) = remember { mutableStateOf("") }
 
@@ -129,7 +132,7 @@ fun HomeScreenContentPortrait(
                                     fontSize = 16.sp,
                                     fontWeight = FontWeight.Medium,
                                 ),
-                                color = Color.Black
+                                color = color.primary
                             )
                         }
                         itemsIndexed(
@@ -197,7 +200,7 @@ fun HomeScreenContentPortrait(
                                     fontSize = 16.sp,
                                     fontWeight = FontWeight.Medium,
                                 ),
-                                color = Color.Black
+                                color = color.primary
                             )
                         }
 

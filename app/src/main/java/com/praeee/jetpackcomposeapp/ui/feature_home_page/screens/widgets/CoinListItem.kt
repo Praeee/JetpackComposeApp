@@ -1,5 +1,6 @@
 package com.praeee.jetpackcomposeapp.ui.feature_home_page.screens.widgets
 
+import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -38,18 +40,19 @@ fun CoinListItemLandscape(
     onEvent: (CoinEvent) -> Unit,
 ) {
 
+    val color = MaterialTheme.colorScheme
+
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = Color(0xFFF3F3F3),
+            containerColor = color.onSecondaryContainer,
         ),
         onClick = {
             onEvent(CoinEvent.OnClickItemCoin(coin))
         },
         modifier = modifier
             .height(100.dp)
-            .width(300.dp)
             .padding(8.dp),
-        ) {
+    ) {
         Row(
             modifier = modifier
                 .height(100.dp)
@@ -74,7 +77,7 @@ fun CoinListItemLandscape(
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold
                     ),
-                    color = Color.Black
+                    color = color.primary
                 )
                 Text(
                     text = coin.symbol ?: "",
@@ -105,7 +108,7 @@ fun CoinListItemLandscape(
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Medium
                     ),
-                    color = Color.Black
+                    color = color.primary
                 )
                 Row(
                     modifier = modifier
@@ -148,10 +151,11 @@ fun CoinListItemPortrait(
     modifier: Modifier = Modifier,
     onEvent: (CoinEvent) -> Unit,
 ) {
+    val color = MaterialTheme.colorScheme
 
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = Color(0xFFF3F3F3),
+            containerColor = color.onSecondaryContainer,
         ),
         onClick = {
             onEvent(CoinEvent.OnClickItemCoin(coin))
@@ -184,7 +188,7 @@ fun CoinListItemPortrait(
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold
                     ),
-                    color = Color.Black
+                    color = color.primary
                 )
                 Text(
                     text = coin.symbol ?: "",
@@ -215,7 +219,7 @@ fun CoinListItemPortrait(
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Medium
                     ),
-                    color = Color.Black
+                    color = color.primary
                 )
                 Row(
                     modifier = modifier
@@ -250,6 +254,16 @@ fun CoinListItemPortrait(
     }
 
 }
+
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark"
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight"
+)
+
 
 
 @Preview(showBackground = true)
