@@ -1,6 +1,5 @@
 package com.praeee.jetpackcomposeapp.di
 
-import com.praeee.jetpackcomposeapp.BuildConfig
 import com.praeee.jetpackcomposeapp.data.AppConstants.COIN_RANKING_URL
 import com.praeee.jetpackcomposeapp.data.api.ApiService
 import com.praeee.jetpackcomposeapp.data.datasource.CoinDataSource
@@ -12,7 +11,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit

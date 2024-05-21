@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -31,7 +32,6 @@ import androidx.compose.ui.unit.sp
 import com.praeee.jetpackcomposeapp.R
 import com.praeee.jetpackcomposeapp.ui.theme.JetpackComposeAppTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InviteFriendsItemPortrait(text: String) {
     val sendIntent = Intent(Intent.ACTION_SEND).apply {
@@ -70,14 +70,14 @@ fun InviteFriendsItemPortrait(text: String) {
                     .align(Alignment.CenterVertically),
             ) {
                 val textString = buildAnnotatedString {
-                    append("You can earn \$10 when you invite a friend to buy crypto.")
+                    append(stringResource(id = R.string.invite_friend_title))
                     withStyle(
                         style = SpanStyle(
                             color = Color(0xFF1D8EF6),
                             fontWeight = FontWeight.Medium
                         )
                     ) {
-                        append(" Invite your friend")
+                        append(stringResource(id = R.string.invite_friend_sub_title))
                     }
                 }
                 Row(
@@ -105,7 +105,6 @@ fun InviteFriendsItemPortrait(text: String) {
 
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InviteFriendsItemLandscape(
     text: String,
@@ -148,14 +147,14 @@ fun InviteFriendsItemLandscape(
                     .align(Alignment.CenterVertically),
             ) {
                 val textString = buildAnnotatedString {
-                    append("You can earn \$10 when you invite a friend to buy crypto.")
+                    append(stringResource(id = R.string.invite_friend_title))
                     withStyle(
                         style = SpanStyle(
                             color = Color(0xFF1D8EF6),
                             fontWeight = FontWeight.Medium
                         )
                     ) {
-                        append(" Invite your friend")
+                        append(stringResource(id = R.string.invite_friend_sub_title))
                     }
                 }
                 Row(

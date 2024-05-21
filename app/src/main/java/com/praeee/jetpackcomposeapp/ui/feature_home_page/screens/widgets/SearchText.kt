@@ -24,6 +24,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -34,7 +35,6 @@ import androidx.compose.ui.unit.sp
 import com.praeee.jetpackcomposeapp.R
 import com.praeee.jetpackcomposeapp.ui.theme.JetpackComposeAppTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchText(
     value: String,
@@ -77,7 +77,7 @@ fun SearchText(
         ),
         placeholder = {
             Text(
-                text = "Search",
+                text = stringResource(id = R.string.search_title),
                 modifier = Modifier,
                 textAlign = TextAlign.Center,
                 style = TextStyle(

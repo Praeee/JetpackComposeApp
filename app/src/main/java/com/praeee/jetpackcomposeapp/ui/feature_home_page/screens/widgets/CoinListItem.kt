@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -32,7 +33,6 @@ import com.praeee.jetpackcomposeapp.ui.feature_home_page.screens.event.CoinEvent
 import com.praeee.jetpackcomposeapp.ui.theme.JetpackComposeAppTheme
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CoinListItemLandscape(
     coin: CoinState,
@@ -99,7 +99,10 @@ fun CoinListItemLandscape(
                     .padding(vertical = 8.dp, horizontal = 16.dp)
             ) {
                 Text(
-                    text = "$${coin.price}",
+                    text = stringResource(
+                        id = R.string.coin_price_dollar,
+                        coin.price ?: ""
+                    ),
                     modifier = modifier
                         .padding(top = 8.dp)
                         .align(Alignment.End),
@@ -144,7 +147,6 @@ fun CoinListItemLandscape(
 
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CoinListItemPortrait(
     coin: CoinState,
@@ -210,7 +212,10 @@ fun CoinListItemPortrait(
                     .padding(vertical = 8.dp, horizontal = 16.dp)
             ) {
                 Text(
-                    text = "$${coin.price}",
+                    text = stringResource(
+                        id = R.string.coin_price_dollar,
+                        coin.price ?: ""
+                    ),
                     modifier = modifier
                         .padding(top = 8.dp)
                         .align(Alignment.End),

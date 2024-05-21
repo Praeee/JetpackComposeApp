@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.praeee.jetpackcomposeapp.data.entity.coin_detail_response.toCoinDetailViewState
@@ -17,13 +16,7 @@ import com.praeee.jetpackcomposeapp.ui.repository.CoinRepository
 import com.praeee.jetpackcomposeapp.utilities.ResourceState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -32,20 +25,16 @@ class CoinViewModel @Inject constructor(
     private val coinRepository: CoinRepository
 ) : ViewModel() {
 
-//    private val _uiState = MutableStateFlow(CoinViewStateValue())
-//    val uiState: StateFlow<CoinViewStateValue> = _uiState.asStateFlow()
-
     var uiState by mutableStateOf(CoinViewStateValue())
         private set
-
-    private var job: Job? = null
 
     init {
         uiState  = uiState.copy(
             isLoading = true,
-            isError = false
+            isError = false,
+            isRefresh = false,
+            linkInviteFriend = "https://careers.lmwn.com/"
         )
-        Log.d(TAG,"init block of CoinViewModel")
         getCoinList()
 
     }
@@ -60,29 +49,12 @@ class CoinViewModel @Inject constructor(
         return result
     }
 
-//    fun startFetchingData() {
-//        job = viewModelScope.launch(Dispatchers.IO) {
-//            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-//                while (isActive) {
-//                    getCoinList()
-//                    delay(10000) // 10 seconds delay
-//                }
-//            }
-//        }
-//    }
-
-    fun stopFetchingData() {
-        job?.cancel()
-    }
-
-    fun pullToRefresh() {
+    private fun pullToRefresh() {
         getCoinList()
     }
 
 
     private fun getCoinList() {
-        Log.d(TAG,"init getCoinList")
-
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 coinRepository.getCoinList().collectLatest { coinResponse ->
@@ -101,19 +73,21 @@ class CoinViewModel @Inject constructor(
                                     stats = coinResponse.data.data.stats.toStatsState()
                                 ) ,
                                 coinTopRank = coinResponse.data.toCoinListState().coins?.filter { it.rank in 1..3 },
-                                inDiceFriendIndex = generateNumbers(5,coinResponse.data.toCoinListState().coins?.size?:5).toSet()
+                                inDiceFriendIndex = generateNumbers(5,coinResponse.data.toCoinListState().coins?.size?:5).toSet(),
                             )
                         }
                         is ResourceState.Error -> {
                             uiState  = uiState.copy(
                                 isError = true,
                                 isLoading = false,
+                                isRefresh = false
                             )
                         }
                         is ResourceState.Loading -> {
                             uiState  = uiState.copy(
                                 isLoading = true,
                                 isError = false,
+                                isRefresh = false
                             )
                         }
                     }
@@ -128,9 +102,6 @@ class CoinViewModel @Inject constructor(
     }
 
     private fun getCoinDetail(uuid : String?) {
-        Log.d(TAG,"init getCoinDetail")
-        Log.d(TAG,"init uuid $uuid")
-
         if (uuid != null) {
             viewModelScope.launch(Dispatchers.IO) {
                 try {
@@ -171,9 +142,6 @@ class CoinViewModel @Inject constructor(
     }
 
     private fun onSearchText(text : String?) {
-        Log.d(TAG,"init onSearchText")
-        Log.d(TAG,"init text $text")
-
         if (!text.isNullOrEmpty() || !text.isNullOrBlank()) {
             viewModelScope.launch(Dispatchers.IO) {
                 try {
@@ -229,14 +197,14 @@ class CoinViewModel @Inject constructor(
                 onSearchText(event.text)
             }
 
-            is CoinEvent.OnCloseBottomSheet -> {
-
+            is CoinEvent.PullToRefresh -> {
+                pullToRefresh()
             }
         }
     }
 
     companion object {
-        const val TAG = "NewsViewModel"
+        const val TAG = "CoinViewModel"
     }
 
 }

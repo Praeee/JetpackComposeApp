@@ -10,4 +10,7 @@ data class CoinViewStateValue (
     val isOpenBottomSheet: Boolean = false,
     val coinSearchListState: CoinListState?= null,
     val isNoResult: Boolean = false,
+    val isRefresh: Boolean = false,
+    val linkInviteFriend: String = ""
+
 )

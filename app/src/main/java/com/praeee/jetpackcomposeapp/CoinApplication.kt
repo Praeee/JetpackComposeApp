@@ -5,7 +5,7 @@ import android.util.Log
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
-class NewsApplication : Application() {
+class CoinApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
@@ -13,7 +13,7 @@ class NewsApplication : Application() {
     }
 
     companion object {
-        const val TAG = "NewsApplication"
+        const val TAG = "CoinApplication"
     }
 
 }

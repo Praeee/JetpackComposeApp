@@ -14,10 +14,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import coil.compose.rememberAsyncImagePainter
 import coil.decode.SvgDecoder
 import coil.request.ImageRequest
-import coil.size.Size
 import com.praeee.jetpackcomposeapp.R
 import com.praeee.jetpackcomposeapp.ui.theme.JetpackComposeAppTheme
 
@@ -26,12 +24,6 @@ fun CoilImage(
     imageUrl: String,
     sizeImage: Int,
 ) {
-    val painter = rememberAsyncImagePainter(
-        model = ImageRequest.Builder(LocalContext.current)
-            .data(imageUrl)
-            .size(Size.ORIGINAL)
-            .build()
-    )
 
     Box(
         modifier = Modifier
@@ -41,14 +33,6 @@ fun CoilImage(
             .clip(RoundedCornerShape(8.dp)),
         contentAlignment = Alignment.Center,
     ) {
-//        Image(
-//            painter = painter,
-//            contentDescription = "icon",
-//            modifier = Modifier
-//                .wrapContentHeight()
-//                .fillMaxWidth(),
-//            contentScale = ContentScale.Crop
-//        )
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
                 .data(imageUrl)
@@ -56,7 +40,6 @@ fun CoilImage(
                 .build(),
             contentDescription = "icon",
             modifier = Modifier
-//                .wrapContentHeight()
                 .fillMaxWidth()
                 .size(sizeImage.dp),
             placeholder = painterResource(id = (R.drawable.placeholder_image)),

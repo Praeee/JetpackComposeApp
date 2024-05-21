@@ -2,9 +2,7 @@ package com.praeee.jetpackcomposeapp.ui.feature_home_page.screens
 
 import android.annotation.SuppressLint
 import android.content.res.Configuration
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -40,6 +38,7 @@ fun HomeScreen(
                 onEvent = onEvent
             )
         }
+        else -> {}
     }
 }
 

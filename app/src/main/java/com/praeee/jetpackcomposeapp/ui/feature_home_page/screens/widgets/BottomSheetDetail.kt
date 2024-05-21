@@ -18,12 +18,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.praeee.jetpackcomposeapp.R
 import com.praeee.jetpackcomposeapp.ui.components.image.CoilImage
 import com.praeee.jetpackcomposeapp.ui.feature_home_page.screens.domain.model.CoinDetailViewState
 import com.praeee.jetpackcomposeapp.ui.theme.JetpackComposeAppTheme
@@ -84,7 +86,7 @@ fun BottomSheetDetail(
                         .wrapContentWidth()
                 ) {
                     Text(
-                        text = "PRICE",//coin.name?:"",
+                        text = stringResource(id = R.string.price_title),
                         modifier = modifier
                             .padding(top = 8.dp),
                         maxLines = 1,
@@ -113,7 +115,7 @@ fun BottomSheetDetail(
                         .wrapContentWidth()
                 ) {
                     Text(
-                        text = "MARKET CAP",
+                        text = stringResource(id = R.string.market_cap_title),
                         modifier = modifier
                             .padding(top = 8.dp),
                         maxLines = 1,
@@ -142,7 +144,7 @@ fun BottomSheetDetail(
 
         if (coin.description.isNullOrBlank() || coin.description.isEmpty()) {
             Text(
-                text = "No description",
+                text = stringResource(id = R.string.no_description_title),
                 modifier = modifier
                     .fillMaxWidth()
                     .padding(16.dp),
@@ -155,7 +157,7 @@ fun BottomSheetDetail(
             )
         } else {
             Text(
-                text = coin.description ?: "",
+                text = coin.description,
                 modifier = modifier
                     .padding(16.dp),
                 textAlign = TextAlign.Start,
@@ -185,7 +187,7 @@ fun BottomSheetDetail(
                     .align(Alignment.CenterHorizontally),
             ) {
                 Text(
-                    text = "GO TO WEBSITE",
+                    text = stringResource(id = R.string.go_to_website_title),
                     modifier = modifier
                         .padding(vertical = 24.dp)
                         .fillMaxWidth(),
