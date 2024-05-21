@@ -56,7 +56,6 @@ fun mapDataMarketCap(string : String) : String {
         (string.length > 12) -> {
             "$ $formatString trillion"
         }
-
         else -> {
             "$ $formatString"
         }
