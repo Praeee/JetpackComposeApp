@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -33,7 +34,7 @@ import com.praeee.jetpackcomposeapp.R
 import com.praeee.jetpackcomposeapp.ui.theme.JetpackComposeAppTheme
 
 @Composable
-fun InviteFriendsItemPortrait(text: String) {
+fun InviteFriendsItem(text: String) {
     val sendIntent = Intent(Intent.ACTION_SEND).apply {
         putExtra(Intent.EXTRA_TEXT, text)
         type = "text/plain"
@@ -50,6 +51,7 @@ fun InviteFriendsItemPortrait(text: String) {
         },
         modifier = Modifier
             .height(100.dp)
+            .fillMaxWidth()
             .padding(8.dp),
 
         ) {
@@ -105,96 +107,12 @@ fun InviteFriendsItemPortrait(text: String) {
 
 }
 
-@Composable
-fun InviteFriendsItemLandscape(
-    text: String,
-    modifier: Modifier = Modifier
-) {
-    val sendIntent = Intent(Intent.ACTION_SEND).apply {
-        putExtra(Intent.EXTRA_TEXT, text)
-        type = "text/plain"
-    }
-    val shareIntent = Intent.createChooser(sendIntent, null)
-    val context = LocalContext.current
-
-    Card(
-        colors = CardDefaults.cardColors(
-            containerColor = Color(0xFF9FCCF6),
-        ),
-        onClick = {
-            context.startActivity(shareIntent)
-        },
-        modifier = modifier
-            .width(300.dp)
-            .height(100.dp)
-            .padding(8.dp),
-
-        ) {
-        Row(
-            modifier = modifier
-                .height(100.dp)
-        ) {
-            Image(
-                modifier = modifier
-                    .padding(8.dp)
-                    .height(70.dp),
-                painter = painterResource(id = (R.drawable.gift_icon)),
-                contentDescription = "icon"
-            )
-            Column(
-                modifier = modifier
-                    .height(70.dp)
-                    .align(Alignment.CenterVertically),
-            ) {
-                val textString = buildAnnotatedString {
-                    append(stringResource(id = R.string.invite_friend_title))
-                    withStyle(
-                        style = SpanStyle(
-                            color = Color(0xFF1D8EF6),
-                            fontWeight = FontWeight.Medium
-                        )
-                    ) {
-                        append(stringResource(id = R.string.invite_friend_sub_title))
-                    }
-                }
-                Row(
-                    modifier = modifier
-                        .fillMaxHeight()
-                ) {
-                    Text(
-                        text = textString,
-                        modifier = modifier
-                            .wrapContentHeight()
-                            .align(Alignment.CenterVertically),
-                        maxLines = 3,
-                        textAlign = TextAlign.Start,
-                        style = TextStyle(
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Normal,
-                        ),
-                        color = Color.Black
-                    )
-                }
-            }
-        }
-    }
-
-}
-
 
 
 @Preview(showBackground = true)
 @Composable
 fun InviteFriendsItemPortraitPreview() {
     JetpackComposeAppTheme {
-        InviteFriendsItemPortrait("hello")
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun InviteFriendsItemLandscapePreview() {
-    JetpackComposeAppTheme {
-        InviteFriendsItemLandscape("hello")
+        InviteFriendsItem("hello")
     }
 }

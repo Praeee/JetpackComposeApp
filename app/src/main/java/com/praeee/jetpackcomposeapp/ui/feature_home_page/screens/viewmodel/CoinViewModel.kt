@@ -1,6 +1,5 @@
 package com.praeee.jetpackcomposeapp.ui.feature_home_page.screens.viewmodel
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -15,6 +14,7 @@ import com.praeee.jetpackcomposeapp.ui.feature_home_page.screens.event.CoinEvent
 import com.praeee.jetpackcomposeapp.ui.repository.CoinRepository
 import com.praeee.jetpackcomposeapp.utilities.ResourceState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -22,7 +22,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CoinViewModel @Inject constructor(
-    private val coinRepository: CoinRepository
+    private val coinRepository: CoinRepository,
+    private val dispatcherIO: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
 
     var uiState by mutableStateOf(CoinViewStateValue())
@@ -55,7 +56,7 @@ class CoinViewModel @Inject constructor(
 
 
     private fun getCoinList() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcherIO) {
             try {
                 coinRepository.getCoinList().collectLatest { coinResponse ->
                     when (coinResponse) {
@@ -103,7 +104,7 @@ class CoinViewModel @Inject constructor(
 
     private fun getCoinDetail(uuid : String?) {
         if (uuid != null) {
-            viewModelScope.launch(Dispatchers.IO) {
+            viewModelScope.launch(dispatcherIO) {
                 try {
                     coinRepository.getCoinDetail(uuid).collectLatest { coinDetailResponse ->
                         when (coinDetailResponse) {
@@ -143,7 +144,7 @@ class CoinViewModel @Inject constructor(
 
     private fun onSearchText(text : String?) {
         if (!text.isNullOrEmpty() || !text.isNullOrBlank()) {
-            viewModelScope.launch(Dispatchers.IO) {
+            viewModelScope.launch(dispatcherIO) {
                 try {
                     coinRepository.getCoinSearch(text).collectLatest { searchList  ->
                         when (searchList) {
