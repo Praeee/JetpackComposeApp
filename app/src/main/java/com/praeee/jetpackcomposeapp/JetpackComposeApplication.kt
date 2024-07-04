@@ -13,7 +13,7 @@ class JetpackComposeApplication : Application() {
     }
 
     companion object {
-        const val TAG = "CoinApplication"
+        const val TAG = "JetpackComposeApplication"
     }
 
 }
