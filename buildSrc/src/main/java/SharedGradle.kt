@@ -2,7 +2,7 @@ import org.gradle.api.Project
 import java.util.Properties
 
 
-val COIN_API_KEY = "COIN_API_KEY"
+const val NEWS_API_KEY = "NEWS_API_KEY"
 
 fun loadPropertyFromLocalFile(key: String, rootProject: Project): String? {
     val localProperties = Properties()
@@ -15,17 +15,8 @@ fun loadPropertyFromLocalFile(key: String, rootProject: Project): String? {
     return null
 }
 
-fun getNewsApiKey(flavour:String, rootProject: Project): String {
-    val key = when(flavour.uppercase()){
-        "PROD" ->{
-            COIN_API_KEY
-        }
-        else ->{
-            COIN_API_KEY
-        }
-
-    }
-    val localApiKey = loadPropertyFromLocalFile(key, rootProject)
-    return localApiKey ?: System.getenv(key) ?: "defaultKey"
+fun getNewsApiKey(rootProject: Project): String {
+    val localApiKey = loadPropertyFromLocalFile(NEWS_API_KEY, rootProject)
+    return localApiKey ?: System.getenv(NEWS_API_KEY) ?: "defaultKey"
 }
 
