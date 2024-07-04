@@ -23,7 +23,6 @@ import javax.inject.Inject
 @HiltViewModel
 class CoinViewModel @Inject constructor(
     private val coinRepository: CoinRepository,
-    private val dispatcherIO: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
 
     var uiState by mutableStateOf(CoinViewStateValue())
@@ -56,7 +55,7 @@ class CoinViewModel @Inject constructor(
 
 
     private fun getCoinList() {
-        viewModelScope.launch(dispatcherIO) {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 coinRepository.getCoinList().collectLatest { coinResponse ->
                     when (coinResponse) {
@@ -104,7 +103,7 @@ class CoinViewModel @Inject constructor(
 
     private fun getCoinDetail(uuid : String?) {
         if (uuid != null) {
-            viewModelScope.launch(dispatcherIO) {
+            viewModelScope.launch(Dispatchers.IO) {
                 try {
                     coinRepository.getCoinDetail(uuid).collectLatest { coinDetailResponse ->
                         when (coinDetailResponse) {
@@ -144,7 +143,7 @@ class CoinViewModel @Inject constructor(
 
     private fun onSearchText(text : String?) {
         if (!text.isNullOrEmpty() || !text.isNullOrBlank()) {
-            viewModelScope.launch(dispatcherIO) {
+            viewModelScope.launch(Dispatchers.IO) {
                 try {
                     coinRepository.getCoinSearch(text).collectLatest { searchList  ->
                         when (searchList) {
