@@ -5,7 +5,7 @@ import android.util.Log
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
-class CoinApplication : Application() {
+class JetpackComposeApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()

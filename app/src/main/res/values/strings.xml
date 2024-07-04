@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LinemanAssignment</string>
+    <string name="app_name">ScgAssignment</string>
 
     <string name="price_title">PRICE</string>
     <string name="market_cap_title">MARKET CAP</string>
