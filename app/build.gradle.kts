@@ -23,8 +23,8 @@ android {
         android.buildFeatures.buildConfig = true
 
         val flavorName = "dev"
-        val coinApiKey = getNewsApiKey(flavorName,rootProject)
-        this.buildConfigField("String","COIN_API_KEY","\"${coinApiKey}\"")
+        val newsApiKey = getNewsApiKey(flavorName,rootProject)
+        this.buildConfigField("String","NEWS_API_KEY","\"${newsApiKey}\"")
 
     }
 
