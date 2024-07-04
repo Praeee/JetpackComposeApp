@@ -15,3 +15,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "JetpackComposeApp"
 include(":app")
+include(":feature:news:news_data")
+include(":feature:news:news_domain")
+include(":feature:news:news_ui")
+include(":core:design-system")

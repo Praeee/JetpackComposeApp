@@ -40,6 +40,7 @@ androidx-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "ktx"
 androidx-lifecycle = { group = "androidx.lifecycle" , name = "lifecycle-runtime-ktx", version.ref = "androidLifecycle"}
 androidx-activity = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose"}
 androidx-compose = { group = "androidx.compose" , name = "compose-bom", version.ref = "composeBom"}
+androidx-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 compose-ui = {group = "androidx.compose" , name = "ui", version.ref = "ui"}
 androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation" }
 androidx-compose-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout" }
