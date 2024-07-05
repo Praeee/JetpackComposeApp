@@ -1,8 +1,12 @@
 plugins {
-    alias(libs.plugins.android.application)
-    id("org.jetbrains.kotlin.android")
-    id("com.google.dagger.hilt.android")
-    kotlin("kapt")
+    id ("com.android.application")
+    id ("kotlin-android")
+    id ("kotlin-kapt")
+    id ("dagger.hilt.android.plugin")
+//    alias(libs.plugins.android.application)
+//    id("org.jetbrains.kotlin.android")
+//    id("com.google.dagger.hilt.android")
+//    kotlin("kapt")
 }
 
 android {
@@ -106,4 +110,9 @@ dependencies {
 
 kapt {
     correctErrorTypes = true
+    useBuildCache = true
+    mapDiagnosticLocations = true
+    javacOptions {
+        option("-Adagger.hilt.disableCrossCompilationRootValidation=true")
+    }
 }

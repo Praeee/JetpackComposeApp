@@ -1,4 +1,4 @@
-package com.praeee.jetpackcomposeapp.ui.feature_home_page.screens.widgets
+package com.praeee.jetpackcomposeapp.ui.feature_home_page.widgets
 
 import android.content.Intent
 import android.content.res.Configuration

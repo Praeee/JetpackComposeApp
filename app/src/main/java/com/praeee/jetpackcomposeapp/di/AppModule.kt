@@ -20,41 +20,58 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class AppModule {
+object AppModule {
 
     @Provides
     @Singleton
-    fun providesRetrofit() : Retrofit {
-        val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
+    fun providesHttpLoggingInterceptor(): HttpLoggingInterceptor {
+        return HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BASIC
         }
-        val httpClient = OkHttpClient().newBuilder().apply {
-            addInterceptor(httpLoggingInterceptor)
-        }
-        httpClient.apply {
-            readTimeout(60,TimeUnit.SECONDS)
-        }
-        val moshi = Moshi.Builder()
-            .add(KotlinJsonAdapterFactory()).build()
+    }
 
+    @Provides
+    @Singleton
+    fun providesOkHttpClient(httpLoggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
+        return OkHttpClient.Builder()
+            .addInterceptor(httpLoggingInterceptor)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    fun providesMoshi(): Moshi {
+        return Moshi.Builder()
+            .add(KotlinJsonAdapterFactory())
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    fun providesRetrofit(okHttpClient: OkHttpClient, moshi: Moshi): Retrofit {
         return Retrofit.Builder()
             .baseUrl(APP_BASE_URL)
-            .client(httpClient.build())
+            .client(okHttpClient)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
     }
 
+    @Provides
+    @Singleton
+    fun providesNewsApiService(retrofit: Retrofit): NewsApiService {
+        return retrofit.create(NewsApiService::class.java)
+    }
 
     @Provides
     @Singleton
-    fun providesNewDataSource(apiService: NewsApiService): NewsDataSource {
+    fun providesNewsDataSource(apiService: NewsApiService): NewsDataSource {
         return NewsDataSourceImpl(apiService)
     }
 
     @Provides
     @Singleton
-    fun provideNewsRepository(newsDataSource: NewsDataSource) : NewsRepository {
+    fun providesNewsRepository(newsDataSource: NewsDataSource): NewsRepository {
         return NewsRepository(newsDataSource)
     }
-
 }

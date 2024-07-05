@@ -18,7 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NewsViewModel @Inject constructor(
-//    private val newsRepository: NewsRepository
+    private val newsRepository: NewsRepository
 ) : ViewModel() {
 
     var uiState by mutableStateOf(NewsUiState())
@@ -31,35 +31,35 @@ class NewsViewModel @Inject constructor(
 
     private fun getNews(country: String) {
         viewModelScope.launch(Dispatchers.IO) {
-//            try {
-//                newsRepository.getNewsHeadline(country).collectLatest { coinDetailResponse ->
-//                    when (coinDetailResponse) {
-//                        is ResourceState.Success -> {
-//                            uiState = uiState.copy(
-//                                isError = false,
-//                                isLoading = false,
-//                                articleList = coinDetailResponse.data.toArticleListUiState()
-//                            )
-//                        }
-//                        is ResourceState.Error -> {
-//                            uiState  = uiState.copy(
-//                                isError = true,
-//                                isLoading = false,
-//                            )
-//                        }
-//                        is ResourceState.Loading -> {
-//                            uiState  = uiState.copy(
-//                                isLoading = true,
-//                                isError = false,
-//                            )
-//                        }
-//                    }
-//                }
-//            } catch (error: Exception) {
-//                uiState  = uiState.copy(
-//                    isError = true,
-//                )
-//            }
+            try {
+                newsRepository.getNewsHeadline(country).collectLatest { coinDetailResponse ->
+                    when (coinDetailResponse) {
+                        is ResourceState.Success -> {
+                            uiState = uiState.copy(
+                                isError = false,
+                                isLoading = false,
+                                articleList = coinDetailResponse.data.toArticleListUiState()
+                            )
+                        }
+                        is ResourceState.Error -> {
+                            uiState  = uiState.copy(
+                                isError = true,
+                                isLoading = false,
+                            )
+                        }
+                        is ResourceState.Loading -> {
+                            uiState  = uiState.copy(
+                                isLoading = true,
+                                isError = false,
+                            )
+                        }
+                    }
+                }
+            } catch (error: Exception) {
+                uiState  = uiState.copy(
+                    isError = true,
+                )
+            }
         }
     }
 
