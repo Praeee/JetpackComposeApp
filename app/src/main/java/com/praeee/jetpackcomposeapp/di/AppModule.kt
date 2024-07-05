@@ -50,11 +50,11 @@ class AppModule {
     fun providesNewDataSource(apiService: NewsApiService): NewsDataSource {
         return NewsDataSourceImpl(apiService)
     }
-//
-//    @Provides
-//    @Singleton
-//    fun provideNewsRepository(newsDataSource: NewsDataSource) : NewsRepository {
-//        return NewsRepository(newsDataSource)
-//    }
+
+    @Provides
+    @Singleton
+    fun provideNewsRepository(newsDataSource: NewsDataSource) : NewsRepository {
+        return NewsRepository(newsDataSource)
+    }
 
 }
