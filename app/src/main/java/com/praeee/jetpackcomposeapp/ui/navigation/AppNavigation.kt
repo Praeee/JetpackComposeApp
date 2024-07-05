@@ -15,6 +15,9 @@ fun AppNavigationGraph() {
         composable(Routes.HOME_SCREEN) {
             HomeScreen()
         }
+        composable(Routes.NEWS_SCREEN) {
+
+        }
 
     }
 

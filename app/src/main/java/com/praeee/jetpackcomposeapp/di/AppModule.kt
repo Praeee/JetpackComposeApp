@@ -1,10 +1,10 @@
 package com.praeee.jetpackcomposeapp.di
 
-import com.praeee.jetpackcomposeapp.data.AppConstants.COIN_RANKING_URL
-import com.praeee.jetpackcomposeapp.data.api.ApiService
-import com.praeee.jetpackcomposeapp.data.datasource.CoinDataSource
-import com.praeee.jetpackcomposeapp.data.datasource.CoinDataSourceImpl
-import com.praeee.jetpackcomposeapp.ui.repository.CoinRepository
+import com.praeee.jetpackcomposeapp.data.AppConstants.APP_BASE_URL
+import com.praeee.jetpackcomposeapp.data.api.NewsApiService
+import com.praeee.jetpackcomposeapp.data.datasource.NewsDataSource
+import com.praeee.jetpackcomposeapp.data.datasource.NewsDataSourceImpl
+import com.praeee.jetpackcomposeapp.ui.repository.NewsRepository
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -38,28 +38,23 @@ class AppModule {
             .add(KotlinJsonAdapterFactory()).build()
 
         return Retrofit.Builder()
-            .baseUrl(COIN_RANKING_URL)
+            .baseUrl(APP_BASE_URL)
             .client(httpClient.build())
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
     }
 
-    @Singleton
-    @Provides
-    fun providesApiService(retrofit: Retrofit) : ApiService {
-        return retrofit.create(ApiService::class.java)
-    }
 
     @Provides
     @Singleton
-    fun providesCoinDataSource(apiService: ApiService): CoinDataSource {
-        return CoinDataSourceImpl(apiService)
+    fun providesNewDataSource(apiService: NewsApiService): NewsDataSource {
+        return NewsDataSourceImpl(apiService)
     }
-
-    @Provides
-    @Singleton
-    fun provideCoinRepository(coinDataSource: CoinDataSource) : CoinRepository {
-        return CoinRepository(coinDataSource)
-    }
+//
+//    @Provides
+//    @Singleton
+//    fun provideNewsRepository(newsDataSource: NewsDataSource) : NewsRepository {
+//        return NewsRepository(newsDataSource)
+//    }
 
 }

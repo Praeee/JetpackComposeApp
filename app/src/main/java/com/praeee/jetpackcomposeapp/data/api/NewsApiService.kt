@@ -1,12 +1,9 @@
 package com.praeee.jetpackcomposeapp.data.api
 
 import com.praeee.jetpackcomposeapp.BuildConfig
-import com.praeee.jetpackcomposeapp.data.entity.coin_detail_response.CoinDetailResponse
-import com.praeee.jetpackcomposeapp.data.entity.coin_list_response.CoinResponse
 import com.praeee.jetpackcomposeapp.data.entity.news_response.NewsResponse
 import retrofit2.Response
 import retrofit2.http.GET
-import retrofit2.http.Path
 import retrofit2.http.Query
 
 @Suppress("kotlin:S6517")
