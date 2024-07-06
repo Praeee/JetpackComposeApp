@@ -62,6 +62,17 @@ fun ArticleDetailCard(
                 .padding(horizontal = 16.dp),
         ) {
             Text(
+                text = article.source?.name ?: "",
+                modifier = modifier
+                    .padding(top = 8.dp),
+                textAlign = TextAlign.Start,
+                style = TextStyle(
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Normal
+                ),
+                color = color.onPrimary
+            )
+            Text(
                 text = article.title ?: "",
                 modifier = modifier
                     .padding(top = 8.dp),

@@ -42,7 +42,7 @@ fun Article.toArticleUiState() : ArticleUiState {
 fun Source.toSourceUiState() : SourceUiState {
     return SourceUiState(
         id = this.id?:"",
-        name = this.name?:""
+        name = "Source : ${this.name?:""}"
     )
 }
 
