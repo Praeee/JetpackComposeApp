@@ -4,9 +4,12 @@ import com.praeee.jetpackcomposeapp.data.AppConstants.APP_BASE_URL
 import com.praeee.jetpackcomposeapp.data.api.NewsApiService
 import com.praeee.jetpackcomposeapp.data.datasource.NewsDataSource
 import com.praeee.jetpackcomposeapp.data.datasource.NewsDataSourceImpl
+import com.praeee.jetpackcomposeapp.ui.feature_news_page.domain.usecase.MapNewsListResponseToUiStateUseCase
+import com.praeee.jetpackcomposeapp.ui.feature_news_page.domain.usecase.MapNewsListResponseToUiStateUseCaseImpl
 import com.praeee.jetpackcomposeapp.ui.repository.NewsRepository
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

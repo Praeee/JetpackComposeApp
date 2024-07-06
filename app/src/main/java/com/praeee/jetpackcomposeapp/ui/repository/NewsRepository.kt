@@ -12,23 +12,39 @@ class NewsRepository @Inject constructor(
     private val newsDataSource: NewsDataSource
 ) {
 
-     fun getNewsHeadline(country: String) : Flow<ResourceState<NewsListResponse>> {
-        return flow {
-            emit(ResourceState.Loading())
+//    suspend fun getNewsHeadline(country: String) : Flow<ResourceState<NewsListResponse>> {
+//        return flow {
+//            emit(ResourceState.Loading())
+//
+//            val response = newsDataSource.getNewsHeadline(country)
+//
+//            when  {
+//                response.isSuccessful && response.body() != null -> {
+//                    emit(ResourceState.Success(response.body()!!))
+//                }
+//                else -> {
+//                    emit(ResourceState.Error("Error fetching coin data"))
+//                }
+//            }
+//        }.catch { e ->
+//            emit(ResourceState.Error(e.localizedMessage ?: "Some error in flow"))
+//        }
+//    }
 
+    fun getNewsHeadline(country: String): Flow<ResourceState<NewsListResponse>> = flow {
+        try {
             val response = newsDataSource.getNewsHeadline(country)
 
-            when  {
-                response.isSuccessful && response.body() != null -> {
-                    emit(ResourceState.Success(response.body()!!))
-                }
-                else -> {
-                    emit(ResourceState.Error("Error fetching coin data"))
-                }
+            if (response.isSuccessful && response.body() != null) {
+                emit(ResourceState.Success(response.body()!!))
+            } else {
+                emit(ResourceState.Error("Error fetching news data"))
             }
-        }.catch { e ->
-            emit(ResourceState.Error(e.localizedMessage ?: "Some error in flow"))
+        } catch (e: Exception) {
+            emit(ResourceState.Error(e.localizedMessage ?: "An unexpected error occurred"))
         }
     }
+
+
 
 }

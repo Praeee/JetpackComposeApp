@@ -9,16 +9,25 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.praeee.jetpackcomposeapp.data.AppConstants
+import com.praeee.jetpackcomposeapp.data.AppConstants.COUNTRY
+import com.praeee.jetpackcomposeapp.data.entity.news_list_response.NewsListResponse
 import com.praeee.jetpackcomposeapp.data.entity.news_list_response.toArticleListUiState
+import com.praeee.jetpackcomposeapp.data.entity.news_response.NewsResponse
 import com.praeee.jetpackcomposeapp.data.entity.news_response.toArticleListUiState
 import com.praeee.jetpackcomposeapp.di.IoDispatcher
+import com.praeee.jetpackcomposeapp.ui.feature_news_page.domain.usecase.MapNewsListResponseToUiStateUseCase
 import com.praeee.jetpackcomposeapp.ui.repository.NewsRepository
 import com.praeee.jetpackcomposeapp.utilities.ResourceState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -34,53 +43,45 @@ class NewsViewModel @Inject constructor(
         private set
 
     init {
-        Log.d(TAG,"init block of NewsViewModel")
+        Log.d(TAG, "init block of NewsViewModel")
+        uiState = uiState.copy(
+            isLoading = true,
+        )
         getNews()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getNews() {
         viewModelScope.launch(Dispatchers.IO) {
-
-            try {
-                newsRepository.getNewsHeadline(AppConstants.COUNTRY)
-                    .collectLatest { coinDetailResponse ->
-                        when (coinDetailResponse) {
-                            is ResourceState.Success -> {
-                                uiState = uiState.copy(
-                                    isError = false,
-                                    isLoading = false,
-                                    articleList = coinDetailResponse.data.toArticleListUiState()
-                                )
-                            }
-
-                            is ResourceState.Error -> {
-                                uiState = uiState.copy(
-                                    isError = true,
-                                    isLoading = false,
-                                )
-                            }
-
-                            is ResourceState.Loading -> {
-                                uiState = uiState.copy(
-                                    isLoading = true,
-                                    isError = false,
-                                )
-                            }
-
-                            else -> {
-                                uiState = uiState.copy(
-                                    isError = true,
-                                )
-                            }
+            newsRepository.getNewsHeadline(COUNTRY)
+                .collectLatest { newsResponse ->
+                    when (newsResponse) {
+                        is ResourceState.Success -> {
+                            uiState = uiState.copy(
+                                isError = false,
+                                isLoading = false,
+                                articleList = newsResponse.data.toArticleListUiState()
+                            )
                         }
-                    }
-            } catch (error: Exception) {
-                uiState = uiState.copy(
-                    isError = true,
-                )
-            }
 
+                        is ResourceState.Error -> {
+                            uiState = uiState.copy(
+                                isError = true,
+                                isLoading = false,
+                            )
+                        }
+
+                        is ResourceState.Loading -> {
+                            uiState = uiState.copy(
+                                isLoading = true,
+                                isError = false,
+                            )
+                        }
+
+                    }
+
+
+                }
 
         }
     }

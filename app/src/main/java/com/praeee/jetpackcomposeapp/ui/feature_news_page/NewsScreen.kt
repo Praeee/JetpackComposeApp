@@ -43,7 +43,6 @@ fun NewsScreen(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewsScreenContent(
     state: NewsUiState,

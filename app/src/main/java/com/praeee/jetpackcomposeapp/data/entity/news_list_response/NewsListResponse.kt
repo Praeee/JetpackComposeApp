@@ -1,6 +1,7 @@
 package com.praeee.jetpackcomposeapp.data.entity.news_list_response
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import com.praeee.jetpackcomposeapp.data.AppConstants
 import com.praeee.jetpackcomposeapp.ui.feature_news_page.ArticleListUiState
@@ -8,9 +9,12 @@ import com.praeee.jetpackcomposeapp.ui.feature_news_page.ArticleUiState
 import com.praeee.jetpackcomposeapp.ui.feature_news_page.SourceUiState
 import java.time.LocalDateTime
 import java.time.OffsetDateTime
+import java.time.ZoneId
 import java.time.ZoneOffset
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
+import kotlin.jvm.Throws
 
 data class NewsListResponse(
     val articles: List<Article>?= emptyList(),
@@ -50,11 +54,16 @@ fun Source.toSourceUiState() : SourceUiState {
 @RequiresApi(Build.VERSION_CODES.O)
 fun timeUtcToFormat(time : String?, format : String) : String {
     // parse it to a LocalDateTime (date & time without zone or offset)
-    time?.let {
-        val offsetDateTime: OffsetDateTime = LocalDateTime.parse(time).atOffset(ZoneOffset.UTC)
-        // define a formatter for your desired output
-        val formatter = DateTimeFormatter.ofPattern(format, Locale("th"))
-        return offsetDateTime.format(formatter)
+    try {
+        val utcFormatter = DateTimeFormatter.ISO_ZONED_DATE_TIME
+        val localFormatter = DateTimeFormatter.ofPattern(format)
+
+        val zonedDateTime = ZonedDateTime.parse(time, utcFormatter)
+            .withZoneSameInstant(ZoneId.systemDefault())
+
+        return zonedDateTime.format(localFormatter)
+    } catch (ex: Exception) {
+        Log.d("timeUtcToFormat", ex.toString())
     }
     return ""
 }
