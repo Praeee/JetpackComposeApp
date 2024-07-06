@@ -8,29 +8,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.praeee.jetpackcomposeapp.data.AppConstants
 import com.praeee.jetpackcomposeapp.data.AppConstants.COUNTRY
-import com.praeee.jetpackcomposeapp.data.entity.news_list_response.NewsListResponse
 import com.praeee.jetpackcomposeapp.data.entity.news_list_response.toArticleListUiState
-import com.praeee.jetpackcomposeapp.data.entity.news_response.NewsResponse
-import com.praeee.jetpackcomposeapp.data.entity.news_response.toArticleListUiState
-import com.praeee.jetpackcomposeapp.di.IoDispatcher
-import com.praeee.jetpackcomposeapp.ui.feature_news_page.domain.usecase.MapNewsListResponseToUiStateUseCase
 import com.praeee.jetpackcomposeapp.ui.repository.NewsRepository
 import com.praeee.jetpackcomposeapp.utilities.ResourceState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.mapLatest
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @RequiresApi(Build.VERSION_CODES.O)

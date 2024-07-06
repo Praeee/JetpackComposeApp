@@ -4,7 +4,6 @@ import com.praeee.jetpackcomposeapp.data.datasource.NewsDataSource
 import com.praeee.jetpackcomposeapp.data.entity.news_list_response.NewsListResponse
 import com.praeee.jetpackcomposeapp.utilities.ResourceState
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 

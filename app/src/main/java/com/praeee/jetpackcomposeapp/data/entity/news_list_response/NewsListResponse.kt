@@ -7,14 +7,9 @@ import com.praeee.jetpackcomposeapp.data.AppConstants
 import com.praeee.jetpackcomposeapp.ui.feature_news_page.ArticleListUiState
 import com.praeee.jetpackcomposeapp.ui.feature_news_page.ArticleUiState
 import com.praeee.jetpackcomposeapp.ui.feature_news_page.SourceUiState
-import java.time.LocalDateTime
-import java.time.OffsetDateTime
 import java.time.ZoneId
-import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import java.util.Locale
-import kotlin.jvm.Throws
 
 data class NewsListResponse(
     val articles: List<Article>?= emptyList(),
