@@ -79,7 +79,7 @@ class NewsViewModel @Inject constructor(
             }
 
             is NewsEvent.PullToRefresh -> {
-
+                getNews()
             }
 
             is NewsEvent.OnClickItemArticle -> {

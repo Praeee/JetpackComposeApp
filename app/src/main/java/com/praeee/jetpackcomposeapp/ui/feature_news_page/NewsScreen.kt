@@ -28,7 +28,7 @@ import kotlinx.coroutines.launch
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun NewsScreen(
-    navEvent: NewsNavEvent,
+    navEvent: (NewsNavEvent) -> Unit = {},
     newsViewModel: NewsViewModel = hiltViewModel()
 ) {
 
@@ -37,7 +37,10 @@ fun NewsScreen(
 
     NewsScreenContent(
         state = state,
-        onEvent = onEvent
+        onEvent = onEvent,
+        onClickItemArticle = {
+            navEvent.invoke(NewsNavEvent.OnNavigateToArticle(it))
+        }
     )
 }
 
@@ -46,6 +49,7 @@ fun NewsScreenContent(
     state: NewsUiState,
     modifier: Modifier = Modifier,
     onEvent: (NewsEvent) -> Unit,
+    onClickItemArticle: (ArticleUiState) -> Unit,
 ) {
 
     val color = MaterialTheme.colorScheme
@@ -68,7 +72,7 @@ fun NewsScreenContent(
             BoxWithSwipeRefresh(
                 onSwipe = {
                     isRefreshing = true
-//                    onEvent.invoke(CoinEvent.PullToRefresh)
+                    onEvent.invoke(NewsEvent.PullToRefresh)
                     coroutineScope.launch {
                         delay(2000)
                         isRefreshing = false
@@ -88,7 +92,12 @@ fun NewsScreenContent(
                         itemsIndexed(
                             articleList
                         ) { _ , article ->
-                            ArticleItemCard(article = article)
+                            ArticleItemCard(
+                                article = article,
+                                onClickItemArticle = {
+                                    onClickItemArticle.invoke(it)
+                                }
+                            )
                         }
 
                     }

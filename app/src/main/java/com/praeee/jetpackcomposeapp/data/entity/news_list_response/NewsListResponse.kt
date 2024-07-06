@@ -33,7 +33,7 @@ fun Article.toArticleUiState() : ArticleUiState {
         description = this.description?:"",
         url = this.url?:"",
         urlToImage = this.urlToImage?:"",
-        publishedAt = timeUtcToFormat(time = this.publishedAt?:"", format = AppConstants.DATE_TIME_FORMAT)?:"",
+        publishedAt = "Updated : ${timeUtcToFormat(time = this.publishedAt?:"", format = AppConstants.DATE_TIME_FORMAT)?:""}",
         content = this.content?:"",
         source = this.source?.toSourceUiState()
     )
