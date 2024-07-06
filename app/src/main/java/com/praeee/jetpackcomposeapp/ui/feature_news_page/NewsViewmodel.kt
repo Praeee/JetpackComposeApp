@@ -36,7 +36,7 @@ class NewsViewModel @Inject constructor(
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun getNews() {
+    fun getNews() {
         viewModelScope.launch(Dispatchers.IO) {
             newsRepository.getNewsHeadline(COUNTRY)
                 .collectLatest { newsResponse ->
