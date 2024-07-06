@@ -42,7 +42,7 @@ fun AppNavigationGraph(
         homeScreen(
             navEvent = HomeNavEvent(
                 onNavigateBack = {
-                    navController.popBackStack()
+//                    navController.popBackStack()
                 },
                 onNavigateToNews = {
                     navController.navigateToNewsScreen()
@@ -57,6 +57,9 @@ fun AppNavigationGraph(
                     newsSharedViewModel.setCurrentArticleModel(it.article)
                     navController.navigateToNewsDetailScreen()
                 }
+                is NewsNavEvent.OnNavigateUp -> {
+                    navController.popBackStack()
+                }
             }
         }
         newsDetailScreen(
@@ -65,7 +68,7 @@ fun AppNavigationGraph(
 
             when (it) {
                 is NewsDetailNavEvent.OnNavigateUp -> {
-                    navController.navigateUp()
+                    navController.popBackStack()
                 }
             }
 

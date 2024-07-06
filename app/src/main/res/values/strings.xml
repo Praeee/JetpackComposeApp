@@ -1,20 +1,8 @@
 <resources>
     <string name="app_name">ScgAssignment</string>
 
-    <string name="price_title">PRICE</string>
-    <string name="market_cap_title">MARKET CAP</string>
-    <string name="no_description_title">No description</string>
+    <string name="news_title">News</string>
+    <string name="news_detail_title">Details</string>
     <string name="go_to_website_title">GO TO WEBSITE</string>
-    <string name="coin_price_dollar">$ %s</string>
-    <string name="top_title">Top </string>
-    <string name="top_3_title"> 3 </string>
-    <string name="rank_crypto_title">rank crypto</string>
-    <string name="invite_friend_title">You can earn $10 when you invite a friend to buy crypto.</string>
-    <string name="invite_friend_sub_title"> Invite your friend</string>
-    <string name="search_title">search</string>
-    <string name="buy_and_sell_title">Buy, sell and hold crypto</string>
-    <string name="format_million">$ %s million</string>
-    <string name="format_billion">$ %s billion</string>
-    <string name="format_trillion">$ %s trillion</string>
 
 </resources>
