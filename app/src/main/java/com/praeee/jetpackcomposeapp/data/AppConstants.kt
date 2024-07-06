@@ -6,4 +6,6 @@ object AppConstants {
 
     const val COUNTRY = "us"
 
+    const val DATE_TIME_FORMAT = "dd MMM yyyy, HH:mm"
+
 }

@@ -7,7 +7,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 @Composable
 fun NewsRoute(
     navEvent: NewsNavEvent,
-    viewModel: NewsViewModel = hiltViewModel(),
 ) {
-
+    NewsScreen(
+        navEvent = navEvent
+    )
 }

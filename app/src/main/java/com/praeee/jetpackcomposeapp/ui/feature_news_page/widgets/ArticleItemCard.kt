@@ -1,11 +1,13 @@
 package com.praeee.jetpackcomposeapp.ui.feature_news_page.widgets
 
-import android.content.res.Configuration
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -15,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -26,7 +29,6 @@ import com.praeee.jetpackcomposeapp.ui.theme.JetpackComposeAppTheme
 fun ArticleItemCard(
     article: ArticleUiState,
     modifier: Modifier = Modifier,
-//    onEvent: (CoinEvent) -> Unit,
 ) {
     val color = MaterialTheme.colorScheme
 
@@ -39,11 +41,14 @@ fun ArticleItemCard(
         },
         modifier = modifier
             .wrapContentHeight()
+            .fillMaxWidth()
             .padding(8.dp),
     ) {
         Row(
             modifier = modifier
-                .height(100.dp)
+                .wrapContentSize()
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
         ) {
             CoilImage(
                 imageUrl = article.urlToImage ?: "",
@@ -61,7 +66,34 @@ fun ArticleItemCard(
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Medium
                 ),
+                overflow = TextOverflow.Ellipsis,
                 color = color.onTertiary
+            )
+            Text(
+                text = article.description ?: "",
+                modifier = modifier
+                    .padding(top = 8.dp),
+                maxLines = 3,
+                textAlign = TextAlign.Start,
+                style = TextStyle(
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Normal
+                ),
+                overflow = TextOverflow.Ellipsis,
+                color = color.onTertiaryContainer
+            )
+            Text(
+                text = article.publishedAt ?: "",
+                modifier = modifier
+                    .padding(top = 8.dp),
+                maxLines = 3,
+                textAlign = TextAlign.Start,
+                style = TextStyle(
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Normal
+                ),
+                overflow = TextOverflow.Ellipsis,
+                color = color.onPrimary
             )
         }
     }
@@ -79,12 +111,16 @@ fun ArticleItemCard(
 
 
 
-//@Preview(showBackground = true)
-//@Composable
-//fun CoinListItemLandscapePreview() {
-//    JetpackComposeAppTheme {
-//        ArticleItemCard(ArticleUiState(
-//            title = "Brazil data protection authority bans Meta from training AI models with data originating in the country"
-//        ), //onEvent = {})
-//    }
-//}
+@Preview(showBackground = true)
+@Composable
+fun CoinListItemLandscapePreview() {
+    JetpackComposeAppTheme {
+        ArticleItemCard(
+            ArticleUiState(
+                title = "Bitcoin slumps below \$59,000 amid market uncertainty",
+                description = "Bitcoin’s (BTC) value dropped below $59,000 on Thursday, trading at $58,827. Market data shows that Bitcoin has fallen 3.38% in… Continue reading Bitcoin slumps below $59,000 amid market uncertainty\nThe post Bitcoin slumps below $59,000 amid market uncertain",
+                publishedAt = "19 Feb 2022, 19:36"
+            ),
+        )
+    }
+}
