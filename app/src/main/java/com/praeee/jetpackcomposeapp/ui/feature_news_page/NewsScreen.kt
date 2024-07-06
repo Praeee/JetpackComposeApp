@@ -3,6 +3,7 @@ package com.praeee.jetpackcomposeapp.ui.feature_news_page
 import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -60,6 +61,7 @@ fun NewsScreenContent(
     Surface(
         modifier = Modifier
             .fillMaxSize()
+            .background(color = color.onSecondaryContainer)
     ) {
 
         Column {

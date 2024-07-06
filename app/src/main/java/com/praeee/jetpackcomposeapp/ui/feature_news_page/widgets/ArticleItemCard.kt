@@ -1,5 +1,6 @@
 package com.praeee.jetpackcomposeapp.ui.feature_news_page.widgets
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -39,22 +41,24 @@ fun ArticleItemCard(
 //            onEvent(CoinEvent.OnClickItemCoin(coin))
         },
         modifier = modifier
-            .wrapContentHeight()
-            .fillMaxWidth()
-            .padding(8.dp),
+            .padding(bottom = 8.dp, top = 8.dp)
+            .padding(horizontal = 8.dp)
+            .fillMaxWidth(),
     ) {
         Row(
             modifier = modifier
-                .wrapContentSize()
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
         ) {
             CoilImage(
                 imageUrl = article.urlToImage ?: "",
-                sizeImage = 240
             )
         }
-        Column {
+        Column(
+            modifier = modifier
+                .padding(bottom = 8.dp)
+                .padding(horizontal = 16.dp),
+        ) {
             Text(
                 text = article.title ?: "",
                 modifier = modifier
@@ -99,15 +103,14 @@ fun ArticleItemCard(
 
 }
 
-//@Preview(
-//    uiMode = Configuration.UI_MODE_NIGHT_YES,
-//    name = "DefaultPreviewDark"
-//)
-//@Preview(
-//    uiMode = Configuration.UI_MODE_NIGHT_NO,
-//    name = "DefaultPreviewLight"
-//)
-
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "DefaultPreviewDark"
+)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "DefaultPreviewLight"
+)
 
 
 @Preview(showBackground = true)

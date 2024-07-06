@@ -3,10 +3,12 @@ package com.praeee.jetpackcomposeapp.ui.feature_home_page
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -33,6 +35,7 @@ fun HomeScreen(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreenContent(
     modifier: Modifier = Modifier,
@@ -55,18 +58,23 @@ fun HomeScreenContent(
                     navEvent.onNavigateToNews.invoke()
                 },
                 modifier = modifier
+                    .fillMaxWidth()
                     .wrapContentHeight()
                     .padding(8.dp),
             ) {
-                Column {
+                Column(
+                    modifier
+                        .fillMaxWidth()
+                ) {
                     Text(
                         text = "News",
                         modifier = modifier
-                            .padding(top = 8.dp),
+                            .fillMaxWidth()
+                            .padding(all = 32.dp),
                         maxLines = 1,
                         textAlign = TextAlign.Center,
                         style = TextStyle(
-                            fontSize = 16.sp,
+                            fontSize = 20.sp,
                             fontWeight = FontWeight.Medium
                         ),
                         color = color.onTertiary
