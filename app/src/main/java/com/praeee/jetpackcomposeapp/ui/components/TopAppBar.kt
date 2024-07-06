@@ -58,12 +58,12 @@ fun TopAppBar(
             Text(
                 text = titleText,
                 modifier = modifier
-                    .padding(top = 8.dp),
+                    .padding(top = 4.dp),
                 maxLines = 1,
                 textAlign = TextAlign.Center,
                 style = TextStyle(
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Medium
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold
                 ),
                 overflow = TextOverflow.Ellipsis,
                 color = color.primary

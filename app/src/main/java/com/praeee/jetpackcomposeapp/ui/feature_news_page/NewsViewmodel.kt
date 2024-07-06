@@ -75,7 +75,7 @@ class NewsViewModel @Inject constructor(
         when (event) {
 
             is NewsEvent.OnErrorUi -> {
-//                getNews()
+                getNews()
             }
 
             is NewsEvent.PullToRefresh -> {

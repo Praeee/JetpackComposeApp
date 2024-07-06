@@ -25,6 +25,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.praeee.jetpackcomposeapp.R
 import com.praeee.jetpackcomposeapp.ui.components.BoxWithSwipeRefresh
+import com.praeee.jetpackcomposeapp.ui.components.ErrorUiState
+import com.praeee.jetpackcomposeapp.ui.components.Loader
 import com.praeee.jetpackcomposeapp.ui.components.TopAppBar
 import com.praeee.jetpackcomposeapp.ui.feature_news_page.widgets.ArticleItemCard
 import kotlinx.coroutines.delay
@@ -78,6 +80,19 @@ fun NewsScreenContent(
     ) {
 
         Column {
+
+            if (state.isLoading) {
+                Loader()
+            }
+
+            if (state.isError) {
+                ErrorUiState(
+                    onClick = {
+                        onEvent.invoke(NewsEvent.OnErrorUi)
+                    }
+                )
+            }
+
             Row {
                 TopAppBar(
                     titleText = stringResource(id = R.string.news_title),
