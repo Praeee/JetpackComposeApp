@@ -1,14 +1,14 @@
 package com.praeee.jetpackcomposeapp.data.datasource
 
-import com.praeee.jetpackcomposeapp.data.api.ApiService
-import com.praeee.jetpackcomposeapp.data.entity.NewsResponse
+import com.praeee.jetpackcomposeapp.data.api.NewsApiService
+import com.praeee.jetpackcomposeapp.data.entity.news_list_response.NewsListResponse
 import retrofit2.Response
 import javax.inject.Inject
 
 class NewsDataSourceImpl @Inject constructor(
-    private val apiService: ApiService
+    private val apiService: NewsApiService
 ) : NewsDataSource {
-    override suspend fun getNewsHeadline(country: String): Response<NewsResponse> {
+    override suspend fun getNewsHeadline(country: String): Response<NewsListResponse> {
         return apiService.getNewsHeadline(country)
     }
 }

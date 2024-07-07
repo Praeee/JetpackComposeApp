@@ -1,3 +1,3 @@
 object Modules {
-    const val utilities = ":utilities"
+    const val jetpackApp = ":app"
 }

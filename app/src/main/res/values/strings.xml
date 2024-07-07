@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">JetpackComposeApp</string>
+    <string name="app_name">ScgAssignment</string>
+
+    <string name="news_title">News</string>
+    <string name="news_detail_title">Details</string>
+    <string name="go_to_website_title">GO TO WEBSITE</string>
+
 </resources>
