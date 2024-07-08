@@ -2,11 +2,7 @@
 
 ## Project Overview
 
-This project was quite challenging and involved creating a product that I had not previously encountered in my professional work. It included developing a new app, connecting to API endpoints, and implementing in-app navigation.
-
 **Tools and Technologies Used:** Jetpack Compose, Kotlin, MVVM, Unit test, Coroutine
-
-**Description:** This project was quite challenging and involved creating a product that I had not previously encountered in my professional work. It included developing a new app, connecting to API endpoints, and implementing in-app navigation.
 
 ## Key Features
 
@@ -23,10 +19,9 @@ This project was quite challenging and involved creating a product that I had no
 
 ## Instructions for Running the Project
 
-1. Clone the repository from [GitHub link or other source].
+1. Clone the repository from [[GitHub link or other source]](https://github.com/Praeee/JetpackComposeApp/tree/feature/news_page).
 2. Open the project in Android Studio.
 3. Build and run the project on an emulator or physical device.
-4. [Any additional steps if necessary]
 
 ## Contact
 
