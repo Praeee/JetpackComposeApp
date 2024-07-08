@@ -1,9 +1,11 @@
 package com.praeee.jetpackcomposeapp.ui.components.image
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -22,14 +24,13 @@ import com.praeee.jetpackcomposeapp.ui.theme.JetpackComposeAppTheme
 @Composable
 fun CoilImage(
     imageUrl: String,
-    sizeImage: Int,
 ) {
 
     Box(
         modifier = Modifier
-            .size(sizeImage.dp)
             .padding(16.dp)
             .fillMaxWidth()
+            .wrapContentHeight()
             .clip(RoundedCornerShape(8.dp)),
         contentAlignment = Alignment.Center,
     ) {
@@ -41,7 +42,7 @@ fun CoilImage(
             contentDescription = "icon",
             modifier = Modifier
                 .fillMaxWidth()
-                .size(sizeImage.dp),
+                .wrapContentHeight(),
             placeholder = painterResource(id = (R.drawable.placeholder_image)),
             error = painterResource(id = (R.drawable.placeholder_image)),
         )
@@ -54,6 +55,6 @@ fun CoilImage(
 @Composable
 fun DefaultPreview() {
     JetpackComposeAppTheme {
-        CoilImage(imageUrl = "", sizeImage = 100)
+        CoilImage(imageUrl = "")
     }
 }

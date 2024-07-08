@@ -15,8 +15,17 @@ fun loadPropertyFromLocalFile(key: String, rootProject: Project): String? {
     return null
 }
 
-fun getNewsApiKey(rootProject: Project): String {
-    val localApiKey = loadPropertyFromLocalFile(NEWS_API_KEY, rootProject)
-    return localApiKey ?: System.getenv(NEWS_API_KEY) ?: "defaultKey"
+fun getNewsApiKey(flavour:String, rootProject: Project): String {
+    val key = when(flavour.uppercase()){
+        "PROD" ->{
+            ""
+        }
+        else ->{
+            NEWS_API_KEY
+        }
+
+    }
+    val localApiKey = loadPropertyFromLocalFile(key, rootProject)
+    return localApiKey ?: System.getenv(key) ?: "defaultKey"
 }
 

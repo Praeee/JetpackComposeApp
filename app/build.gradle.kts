@@ -1,8 +1,12 @@
 plugins {
-    alias(libs.plugins.android.application)
-    id("org.jetbrains.kotlin.android")
-    id("com.google.dagger.hilt.android")
-    kotlin("kapt")
+    id ("com.android.application")
+    id ("kotlin-android")
+    id ("kotlin-kapt")
+    id ("dagger.hilt.android.plugin")
+//    alias(libs.plugins.android.application)
+//    id("org.jetbrains.kotlin.android")
+//    id("com.google.dagger.hilt.android")
+//    kotlin("kapt")
 }
 
 android {
@@ -22,7 +26,8 @@ android {
         }
         android.buildFeatures.buildConfig = true
 
-        val newsApiKey = getNewsApiKey(rootProject)
+        val flavorName = "dev"
+        val newsApiKey = getNewsApiKey(flavorName,rootProject)
         this.buildConfigField("String","NEWS_API_KEY","\"${newsApiKey}\"")
 
     }
@@ -64,10 +69,6 @@ android {
 
 dependencies {
 
-//    implementation(project(Modules.newsData))
-//    implementation(project(Modules.newsDomain))
-//    implementation(project(Modules.newsUi))
-
     implementation(libs.androidx.ktx)
     implementation(libs.androidx.lifecycle)
     implementation(libs.androidx.activity)
@@ -90,26 +91,30 @@ dependencies {
     implementation(libs.coil.svg)
     implementation(libs.swipe.refresh)
     implementation(libs.androidx.material3.android)
-
+    implementation("com.google.code.gson:gson:2.9.0")
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("androidx.activity:activity-compose:1.8.2")
     implementation(platform("androidx.compose:compose-bom:2023.08.00"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
-    implementation(libs.androidx.ui.tooling.preview)
+    implementation("androidx.compose.ui:ui-tooling-preview")
     testImplementation("junit:junit:4.13.2")
+    testImplementation ("org.mockito:mockito-core:4.0.0")
+    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation(platform("androidx.compose:compose-bom:2023.08.00"))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
-
-    implementation(project(Modules.coreDesignSystem))
-
 }
 
 kapt {
     correctErrorTypes = true
+    useBuildCache = true
+    mapDiagnosticLocations = true
+    javacOptions {
+        option("-Adagger.hilt.disableCrossCompilationRootValidation=true")
+    }
 }

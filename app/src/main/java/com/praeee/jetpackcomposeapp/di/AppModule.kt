@@ -1,10 +1,10 @@
 package com.praeee.jetpackcomposeapp.di
 
-import com.praeee.jetpackcomposeapp.data.AppConstants.COIN_RANKING_URL
-import com.praeee.jetpackcomposeapp.data.api.ApiService
-import com.praeee.jetpackcomposeapp.data.datasource.CoinDataSource
-import com.praeee.jetpackcomposeapp.data.datasource.CoinDataSourceImpl
-import com.praeee.jetpackcomposeapp.ui.repository.CoinRepository
+import com.praeee.jetpackcomposeapp.data.AppConstants.APP_BASE_URL
+import com.praeee.jetpackcomposeapp.data.api.NewsApiService
+import com.praeee.jetpackcomposeapp.data.datasource.NewsDataSource
+import com.praeee.jetpackcomposeapp.data.datasource.NewsDataSourceImpl
+import com.praeee.jetpackcomposeapp.ui.repository.NewsRepository
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -20,46 +20,58 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class AppModule {
+object AppModule {
 
     @Provides
     @Singleton
-    fun providesRetrofit() : Retrofit {
-        val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
+    fun providesHttpLoggingInterceptor(): HttpLoggingInterceptor {
+        return HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BASIC
         }
-        val httpClient = OkHttpClient().newBuilder().apply {
-            addInterceptor(httpLoggingInterceptor)
-        }
-        httpClient.apply {
-            readTimeout(60,TimeUnit.SECONDS)
-        }
-        val moshi = Moshi.Builder()
-            .add(KotlinJsonAdapterFactory()).build()
+    }
 
+    @Provides
+    @Singleton
+    fun providesOkHttpClient(httpLoggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
+        return OkHttpClient.Builder()
+            .addInterceptor(httpLoggingInterceptor)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    fun providesMoshi(): Moshi {
+        return Moshi.Builder()
+            .add(KotlinJsonAdapterFactory())
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    fun providesRetrofit(okHttpClient: OkHttpClient, moshi: Moshi): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(COIN_RANKING_URL)
-            .client(httpClient.build())
+            .baseUrl(APP_BASE_URL)
+            .client(okHttpClient)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
     }
 
-    @Singleton
     @Provides
-    fun providesApiService(retrofit: Retrofit) : ApiService {
-        return retrofit.create(ApiService::class.java)
+    @Singleton
+    fun providesNewsApiService(retrofit: Retrofit): NewsApiService {
+        return retrofit.create(NewsApiService::class.java)
     }
 
     @Provides
     @Singleton
-    fun providesCoinDataSource(apiService: ApiService): CoinDataSource {
-        return CoinDataSourceImpl(apiService)
+    fun providesNewsDataSource(apiService: NewsApiService): NewsDataSource {
+        return NewsDataSourceImpl(apiService)
     }
 
     @Provides
     @Singleton
-    fun provideCoinRepository(coinDataSource: CoinDataSource) : CoinRepository {
-        return CoinRepository(coinDataSource)
+    fun providesNewsRepository(newsDataSource: NewsDataSource): NewsRepository {
+        return NewsRepository(newsDataSource)
     }
-
 }
