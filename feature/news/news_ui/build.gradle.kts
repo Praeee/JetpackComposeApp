@@ -10,8 +10,6 @@ android {
 
 dependencies {
 
-    implementation(project(Modules.coreDesignSystem))
-
     implementation(libs.androidx.ktx)
     implementation(libs.appcompat)
     implementation(libs.material)
