@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-**Tools and Technologies Used:** Jetpack Compose, Kotlin, MVVM, Unit test, Coroutine
+**Tools and Technologies Used:** Jetpack Compose, Kotlin, MVVM, Unit test, UI test, Coroutine
 
 ## Key Features
 
