@@ -69,6 +69,10 @@ android {
 
 dependencies {
 
+    implementation(project(Modules.coinUi))
+    implementation(project(Modules.coreCommon))
+    implementation(project(Modules.coreFeatureApi))
+
     implementation(libs.androidx.ktx)
     implementation(libs.androidx.lifecycle)
     implementation(libs.androidx.activity)
@@ -93,7 +97,7 @@ dependencies {
     implementation(libs.androidx.material3.android)
     implementation("com.google.code.gson:gson:2.9.0")
     implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
+//    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("androidx.activity:activity-compose:1.8.2")
     implementation(platform("androidx.compose:compose-bom:2023.08.00"))
     implementation("androidx.compose.ui:ui")

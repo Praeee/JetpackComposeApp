@@ -1,4 +1,11 @@
 [versions]
+activityComposeVersion = "1.9.0"
+composeBomVersion = "2024.06.00"
+converterGson = "2.11.0"
+coreKtx = "1.13.1"
+espressoCoreVersion = "3.6.1"
+junitVersion = "1.2.1"
+kotlinxCoroutinesTest = "1.7.3"
 ktx = "1.12.0"
 androidGradlePlugin = "8.0.1"
 androidLifecycle = "2.7.0"
@@ -7,6 +14,8 @@ androidxComposeMaterial3Adaptive = "1.0.0-alpha11"
 androidxComposeRuntimeTracing = "1.0.0-beta01"
 androidxComposeUiTest = "1.7.0-alpha07"
 composeBom = "2023.08.00"
+lifecycleRuntimeKtx = "2.8.3"
+mockitoCore = "5.2.0"
 ui = "ui"
 uiGraphics = "ui-graphics"
 uiToolingPreview = "ui-tooling-preview"
@@ -23,7 +32,6 @@ material = "1.11.0"
 retrofit = "2.9.0"
 retrofitKotlinxSerializationJson = "1.0.0"
 okhttp = "4.12.0"
-gsonConverter  = "2.11.0"
 glide = "4.16.0"
 moshi = "1.15.1"
 moshiConverter = "2.11.0"
@@ -36,10 +44,21 @@ material3Android = "1.2.1"
 refresh = "0.20.3"
 
 [libraries]
+androidx-activity-compose-v190 = { module = "androidx.activity:activity-compose", version.ref = "activityComposeVersion" }
+androidx-compose-bom-v20240600 = { module = "androidx.compose:compose-bom", version.ref = "composeBomVersion" }
+androidx-core-ktx-v1131 = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
+androidx-espresso-core-v361 = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCoreVersion" }
+androidx-junit-v121 = { module = "androidx.test.ext:junit", version.ref = "junitVersion" }
 androidx-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "ktx" }
 androidx-lifecycle = { group = "androidx.lifecycle" , name = "lifecycle-runtime-ktx", version.ref = "androidLifecycle"}
 androidx-activity = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose"}
 androidx-compose = { group = "androidx.compose" , name = "compose-bom", version.ref = "composeBom"}
+androidx-lifecycle-runtime-ktx-v283 = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
+androidx-ui = { module = "androidx.compose.ui:ui" }
+androidx-ui-graphics = { module = "androidx.compose.ui:ui-graphics" }
+androidx-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
+androidx-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
+androidx-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 androidx-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 compose-ui = {group = "androidx.compose" , name = "ui", version.ref = "ui"}
 androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation" }
@@ -59,8 +78,11 @@ androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "u
 androidx-compose-ui-util = { group = "androidx.compose.ui", name = "ui-util" }
 compose-ugraphics = {group = "androidx.compose" , name = "ui", version.ref = "uiGraphics"}
 compose-tool = {group = "androidx.compose" , name = "ui", version.ref = "uiToolingPreview"}
+converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
 material3 = {group = "androidx.compose" , name = "material3", version.ref = "material3"}
 junit = {group = "junit" , name = "junit", version.ref = "junit"}
+mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockitoCore" }
 textExtJunit = {group = "androidx.test.ext" , name = "junit", version.ref = "textExtJunit"}
 espresso = {group = "androidx.test.espresso" , name = "espresso-core", version.ref = "espressoCore"}
 #junit4 = {group = "androidx.compose.ui" , name = "ui-test-junit4", version.ref = "espressoCore"}
@@ -75,7 +97,6 @@ material = { group = "com.google.android.material", name = "material", version.r
 retrofit-core = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-kotlin-serialization = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version.ref = "retrofitKotlinxSerializationJson" }
 okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
-gson-converter = { group = "com.squareup.retrofits2", name = "converter-gson" , version.ref = "gsonConverter"}
 glide = { group = "com.github.bumptech.glide", name = "glide" , version.ref = "glide"}
 glide-complier = { group = "com.github.bumptech.glide", name = "compiler" , version.ref = "glide"}
 
@@ -93,6 +114,7 @@ coil = { group = "io.coil-kt", name = "coil-compose" , version.ref = "coil"}
 coil-svg = { group = "io.coil-kt", name = "coil-svg" , version.ref = "coil"}
 androidx-material3-android = { group = "androidx.compose.material3", name = "material3-android", version.ref = "material3Android" }
 swipe-refresh  = { group = "com.google.accompanist", name = "accompanist-swiperefresh", version.ref = "refresh" }
+ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }

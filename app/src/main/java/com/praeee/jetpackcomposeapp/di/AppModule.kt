@@ -1,9 +1,11 @@
 package com.praeee.jetpackcomposeapp.di
 
+import com.praeee.feature.coin.ui.navigation.CoinApi
 import com.praeee.jetpackcomposeapp.data.AppConstants.APP_BASE_URL
 import com.praeee.jetpackcomposeapp.data.api.NewsApiService
 import com.praeee.jetpackcomposeapp.data.datasource.NewsDataSource
 import com.praeee.jetpackcomposeapp.data.datasource.NewsDataSourceImpl
+import com.praeee.jetpackcomposeapp.navigation.NavigationProvider
 import com.praeee.jetpackcomposeapp.ui.repository.NewsRepository
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -73,5 +75,10 @@ object AppModule {
     @Singleton
     fun providesNewsRepository(newsDataSource: NewsDataSource): NewsRepository {
         return NewsRepository(newsDataSource)
+    }
+
+    @Provides
+    fun provideNavigationProvider(coinApi: CoinApi): NavigationProvider {
+        return NavigationProvider(coinApi)
     }
 }

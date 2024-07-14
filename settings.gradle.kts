@@ -15,3 +15,9 @@ dependencyResolutionManagement {
 
 rootProject.name = "JetpackComposeApp"
 include(":app")
+include(":feature:coin:data")
+include(":feature:coin:domain")
+include(":feature:coin:ui")
+include(":core:network")
+include(":core:common")
+include(":core:feature_api")
