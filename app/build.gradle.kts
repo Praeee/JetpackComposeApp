@@ -32,6 +32,10 @@ android {
 
     }
 
+    testOptions {
+        unitTests.isIncludeAndroidResources = true
+    }
+
     buildTypes {
         getByName("debug") {
             isDebuggable = true

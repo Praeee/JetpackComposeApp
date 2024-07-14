@@ -27,6 +27,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.praeee.jetpackcomposeapp.R
 import com.praeee.jetpackcomposeapp.ui.components.BoxWithSwipeRefresh
@@ -135,19 +137,22 @@ fun NewsScreenContent(
 
                         itemsIndexed(
                             articleList
-                        ) { _, article ->
+                        ) { index , article ->
                             ArticleItemCard(
                                 article = article,
                                 onClickItemArticle = {
                                     onClickItemArticle.invoke(it)
-                                }
+                                },
+                                modifier = modifier.semantics { contentDescription = "ArticleItem_$index"},
                             )
                         }
 
                     }
                     Column {
                         AnimatedVisibility(visible = !listState.isScrollingUp(), enter = fadeIn(), exit = fadeOut()) {
-                            GoToTop {
+                            GoToTop(
+                                modifier = modifier
+                            ) {
                                 scope.launch {
                                     listState.scrollToItem(0)
                                 }

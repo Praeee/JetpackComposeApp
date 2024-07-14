@@ -29,6 +29,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -50,7 +52,8 @@ fun Loader() {
         CircularProgressIndicator(
             modifier = Modifier
                 .size(50.dp)
-                .padding(10.dp),
+                .padding(10.dp)
+                .semantics { contentDescription = "Loader" },
             color = Color.Blue,
         )
     }
@@ -71,7 +74,8 @@ fun ErrorUiState(
         Text(
             text = "Could not load data",
             modifier = modifier
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .semantics { contentDescription = "errorText" },
             textAlign = TextAlign.Center,
             style = TextStyle(
                 fontSize = 18.sp,
@@ -85,13 +89,14 @@ fun ErrorUiState(
                 .clickable {
                     onClick.invoke()
                 }
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .semantics { contentDescription = "tryAgainText" },
             textAlign = TextAlign.Center,
             style = TextStyle(
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold
             ),
-            color = Color(0xFF1D8EF6)
+            color = Color(0xFF1D8EF6),
         )
     }
 }
@@ -132,10 +137,13 @@ fun NotFoundKeyword() {
 }
 
 @Composable
-fun GoToTop(goToTop: () -> Unit) {
-    Box(modifier = Modifier.fillMaxSize()) {
+fun GoToTop(
+    modifier: Modifier = Modifier,
+    goToTop: () -> Unit
+) {
+    Box(modifier = modifier.fillMaxSize()) {
         FloatingActionButton(
-            modifier = Modifier
+            modifier = modifier
                 .padding(32.dp)
                 .size(50.dp)
                 .shadow(1.dp)
