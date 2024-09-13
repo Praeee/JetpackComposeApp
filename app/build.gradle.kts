@@ -3,6 +3,8 @@ plugins {
     id ("kotlin-android")
     id ("kotlin-kapt")
     id ("dagger.hilt.android.plugin")
+    id("com.google.gms.google-services")
+    alias(libs.plugins.google.firebase.appdistribution)
 //    alias(libs.plugins.android.application)
 //    id("org.jetbrains.kotlin.android")
 //    id("com.google.dagger.hilt.android")
@@ -40,6 +42,11 @@ android {
         getByName("debug") {
             isDebuggable = true
             isMinifyEnabled = false
+            firebaseAppDistribution {
+                artifactType = "APK"
+                releaseNotesFile = "/path/to/releasenotes.txt"
+//                testers="pornpailin.char@gmail.com"
+            }
         }
         getByName("release") {
             isMinifyEnabled = false
@@ -49,6 +56,24 @@ android {
             )
         }
     }
+//    productFlavors {
+//        getByName("debug") {
+//            dimension = "1.0"
+//            firebaseAppDistribution {
+//                artifactType = "APK"
+//                releaseNotes = "Release notes for demo version"
+////                testers = "pornpailin.char@gmail.com"
+//            }
+//        }
+//        getByName("release") {
+//            dimension = "1.0"
+//            firebaseAppDistribution {
+//                artifactType = "APK"
+//                releaseNotes = "Release notes for full version"
+////                testers = "pornpailin.char@gmail.com"
+//            }
+//        }
+//    }
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -112,6 +137,8 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    implementation(platform(libs.firebase.bom))
 }
 
 kapt {

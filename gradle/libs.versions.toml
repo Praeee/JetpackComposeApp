@@ -1,4 +1,5 @@
 [versions]
+firebaseBom = "33.3.0"
 ktx = "1.12.0"
 androidGradlePlugin = "8.0.1"
 androidLifecycle = "2.7.0"
@@ -34,6 +35,8 @@ realm = "10.11.0"
 coil = "2.6.0"
 material3Android = "1.2.1"
 refresh = "0.20.3"
+googleFirebaseAppdistribution = "5.0.0"
+googleGmsGoogleServices = "4.4.2"
 
 [libraries]
 androidx-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "ktx" }
@@ -59,6 +62,7 @@ androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "u
 androidx-compose-ui-util = { group = "androidx.compose.ui", name = "ui-util" }
 compose-ugraphics = {group = "androidx.compose" , name = "ui", version.ref = "uiGraphics"}
 compose-tool = {group = "androidx.compose" , name = "ui", version.ref = "uiToolingPreview"}
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 material3 = {group = "androidx.compose" , name = "material3", version.ref = "material3"}
 junit = {group = "junit" , name = "junit", version.ref = "junit"}
 textExtJunit = {group = "androidx.test.ext" , name = "junit", version.ref = "textExtJunit"}
@@ -99,5 +103,7 @@ android-application = { id = "com.android.application", version.ref = "androidGr
 androidLibrary = { id = "com.android.library", version.ref = "androidGradlePlugin" }
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 realm = { id = "realm-android", version.ref = "realm" }
+google-firebase-appdistribution = { id = "com.google.firebase.appdistribution", version.ref = "googleFirebaseAppdistribution" }
+google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
 
 #{group = "" , name = "", version = ""}
