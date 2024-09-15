@@ -8,6 +8,7 @@ androidxComposeMaterial3Adaptive = "1.0.0-alpha11"
 androidxComposeRuntimeTracing = "1.0.0-beta01"
 androidxComposeUiTest = "1.7.0-alpha07"
 composeBom = "2023.08.00"
+playServicesAuth = "21.2.0"
 ui = "ui"
 uiGraphics = "ui-graphics"
 uiToolingPreview = "ui-tooling-preview"
@@ -62,9 +63,11 @@ androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "u
 androidx-compose-ui-util = { group = "androidx.compose.ui", name = "ui-util" }
 compose-ugraphics = {group = "androidx.compose" , name = "ui", version.ref = "uiGraphics"}
 compose-tool = {group = "androidx.compose" , name = "ui", version.ref = "uiToolingPreview"}
+firebase-auth = { module = "com.google.firebase:firebase-auth" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 material3 = {group = "androidx.compose" , name = "material3", version.ref = "material3"}
 junit = {group = "junit" , name = "junit", version.ref = "junit"}
+play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
 textExtJunit = {group = "androidx.test.ext" , name = "junit", version.ref = "textExtJunit"}
 espresso = {group = "androidx.test.espresso" , name = "espresso-core", version.ref = "espressoCore"}
 #junit4 = {group = "androidx.compose.ui" , name = "ui-test-junit4", version.ref = "espressoCore"}
