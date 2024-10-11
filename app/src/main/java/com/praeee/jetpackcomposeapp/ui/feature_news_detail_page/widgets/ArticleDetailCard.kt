@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.net.Uri
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,12 +13,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -42,11 +46,13 @@ fun ArticleDetailCard(
     modifier: Modifier = Modifier,
 ) {
     val color = MaterialTheme.colorScheme
-
+    val scrollState = rememberScrollState()
+    LaunchedEffect(Unit) { scrollState.animateScrollTo(100) }
 
     Column(
         modifier = modifier
             .padding(bottom = 8.dp)
+            .verticalScroll(scrollState)
     ) {
         Row(
             modifier = modifier
@@ -172,7 +178,8 @@ fun CoinListItemLandscapePreview() {
         ArticleDetailCard(
             ArticleUiState(
                 title = "Bitcoin slumps below \$59,000 amid market uncertainty",
-                description = "Bitcoin’s (BTC) value dropped below $59,000 on Thursday, trading at $58,827. Market data shows that Bitcoin has fallen 3.38% in… Continue reading Bitcoin slumps below $59,000 amid market uncertainty\nThe post Bitcoin slumps below $59,000 amid market uncertain",
+                description = "Bitcoin’s (BTC) value dropped below $59,000 on Thursday, trading at $58,827. Market data shows that Bitcoin has fallen 3.38% in… Continue reading Bitcoin slumps below $59,000 amid market uncertainty\nThe post Bitcoin slumps below $59,000 amid market uncertain \nBitcoin’s (BTC) value dropped below \$59,000 on Thursday, trading at \$58,827. Market data shows that Bitcoin has fallen 3.38% in… Continue reading Bitcoin slumps below \$59,000 amid market uncertainty\n" +
+                        "The post Bitcoin slumps below \$59,000 amid market uncertain",
                 publishedAt = "19 Feb 2022, 19:36"
             ),
         )
