@@ -60,6 +60,7 @@ truth = "1.1.3"
 turbine = "0.12.1"
 versionCode = "1"
 versionName = "1.0"
+accessibilityTestFramework = "3.1.2"
 
 [libraries]
 accompanist-appcompat-theme = { group = "com.google.accompanist", name = "accompanist-appcompat-theme", version.ref = "accompanist" }
@@ -143,6 +144,7 @@ timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "tim
 # Dependencies of the included build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+accessibility-test-framework = { group = "com.google.android.apps.common.testing.accessibility.framework", name = "accessibility-test-framework", version.ref = "accessibilityTestFramework" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
