@@ -176,4 +176,7 @@ dependencies {
     androidTestImplementation(libs.hilt.android.testing)
     kaptAndroidTest(libs.hilt.compiler)
 
+    //json
+    implementation(libs.moshi.kotlin)
+
 }
